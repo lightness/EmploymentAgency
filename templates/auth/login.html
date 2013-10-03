@@ -1,9 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends 'layout/master.html' %}
 
-</body>
-</html>
+{% block content %}
+    <form id="form-signin">
+        <h2 class="form-signin-heading">Войдите в систему</h2>
+        <label>E-mail</label>
+        <input type="text" class="form-control" placeholder="example@gmail.com" autofocus="">
+        <label>Пароль</label>
+        <input type="password" class="form-control" placeholder="Password">
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+{% endblock %}
