@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <title>ИС "Агентство занятости"</title>
+    <link href="{{ STATIC_URL }}own/css/style.css" rel="stylesheet">
+{#    <link href="{{ STATIC_URL }}css/django-dynamical-formset.css" rel="stylesheet">#}
+    <link href="{{ STATIC_URL }}plugins/bootstrap-3.0.0/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}plugins/bootstrap-3.0.0/css/bootstrap-theme.css" rel="stylesheet">
+{#    <link href="{{ STATIC_URL }}plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet">#}
+{#    <link href="{{ STATIC_URL }}css/bootstrap-3.0.0-tabs.css" rel="stylesheet">#}
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="{{ STATIC_URL }}plugins/jquery/js/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}plugins/jquery/js/ajax_csrf.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}plugins/bootstrap-3.0.0/js/bootstrap.js" type="text/javascript"></script>
+{#    <script src="{{ STATIC_URL }}plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"#}
+{#            type="text/javascript"></script>#}
+{#    <script src="{{ STATIC_URL }}plugins/dynamic-django-formset/jquery.formset.js" type="text/javascript"></script>#}
+    {% block extrahead %}
+    {% endblock %}
+    <style>
+        {% block css %}
+        {% endblock %}
+    </style>
+    <script type="text/javascript">
+        $(function () {
+{#            $('[data-toggle="datepicker"]').datepicker();#}
+{#            $('[data-toggle="tooltip"]').tooltip();#}
+{#            $('[data-toggle="popover"]').popover({#}
+{#                html: true,#}
+{#                trigger: "hover",#}
+{#                title: function () {#}
+{#                    return $('.popover-title', this).html();#}
+{#                },#}
+{#                content: function () {#}
+{#                    return $('.popover-content', this).html();#}
+{#                }#}
+{#            });#}
+            {% block js %}
+            {% endblock %}
+        });
+    </script>
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">ИС "Агентство занятости"</div>
+        </div>
+        <div class="navbar-collapse collapse">
+{#            <ul class="nav navbar-nav">#}
+{#                <li class="dropdown">#}
+{#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+{#                        <i class="glyphicon glyphicon-user"></i>#}
+{#                        Кандидаты#}
+{#                        <b class="caret"></b>#}
+{#                    </a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li>#}
+{#                            <a href="{% url 'About' %}">#}
+{#                                <i class="glyphicon glyphicon-list"></i>#}
+{#                                Список кандидатов#}
+{#                            </a>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="{% url 'About' %}">#}
+{#                                <i class="glyphicon glyphicon-plus"></i>#}
+{#                                Добавить#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#            </ul>#}
+
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'About' %}">О программе</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'Login' %}">Войти</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="page-container">
+    <div class="container">
+        {% block content %}Empty page{% endblock %}
+    </div>
+</div>
+
+<!-- container -->
+
+</body>
+</html>
