@@ -10,5 +10,8 @@ urlpatterns = patterns('',
     # http://имя_сайта/auth/register
     url(r"^register/$", views.view_register, name='Register'),
 
+    # http://имя_сайта/auth/recovery
+    url(r"^recovery/$", views.view_recovery, name='Recovery'),
+
 )
 

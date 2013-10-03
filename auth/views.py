@@ -18,4 +18,11 @@ def view_register(request):
     }
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 
+def view_recovery(request):
+    template_name = "auth/recovery.html"
+    context = {
+
+    }
+    return render_to_response(template_name, context, context_instance=RequestContext(request))
+
 

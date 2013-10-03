@@ -8,6 +8,8 @@
         <label>Пароль</label>
         <input type="password" class="form-control" placeholder="Password">
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+        <a class="pull-left" href="{% url 'Register' %}">Регистрация</a>
+        <a class="pull-right" href="{% url 'Recovery' %}">Забыли пароль?</a>
     </form>
 {% endblock %}
