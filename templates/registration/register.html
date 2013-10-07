@@ -1,0 +1,73 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+    <form class="form-horizontal" action='' method="POST" id="form-register">{% csrf_token %}
+        <fieldset>
+            <h2>Регистрация</h2>
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <b>Исправьте следующие ошибки:</b>
+                    {{ form.non_field_errors }}
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><b>{{ field.label }}</b> - {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+{#            {{ form }}#}
+                        <div>
+                            <!-- Username -->
+                            <label class="control-label" for="username">Имя пользователя</label>
+
+                            <div class="controls">
+                                <input type="text" id="username" name="username" placeholder="Vasya" class="form-control">
+
+                                <p class="help-block">Имя пользователя может содержать буквы и цифры без пробелов</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <!-- E-mail -->
+                            <label class="control-label" for="email">E-mail</label>
+
+                            <div class="controls">
+                                <input type="text" id="email" name="email" placeholder="example@gmail.com" class="form-control">
+
+                                <p class="help-block">Пожалуйста, введите ваш E-mail</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <!-- Password-->
+                            <label class="control-label" for="password1">Пароль</label>
+
+                            <div class="controls">
+                                <input type="password" id="password1" name="password1" class="form-control">
+
+                                <p class="help-block">Пароль должен содержать минимум 4 символа</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <!-- Password -->
+                            <label class="control-label" for="password2">Подтверждение пароля</label>
+
+                            <div class="controls">
+                                <input type="password" id="password2" name="password2" class="form-control">
+
+                                <p class="help-block">Пожалуйста, введите повторно пароль</p>
+                            </div>
+                        </div>
+
+            <div>
+                <!-- Button -->
+                <div class="controls">
+                    <button class="btn btn-success">Зарегистрироваться</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

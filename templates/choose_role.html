@@ -1,0 +1,33 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+    <div class="row">
+        <h2>Выберите свою роль</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4>Работодатель</h4>
+        </div>
+        <div class="col-lg-6">
+            <h4>Соискатель</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <p>Работодатели могут публиковать объявления о вакансиях.</p>
+
+            <form action="." method="post">{% csrf_token %}
+                <input type="hidden" name="role" value="EMP"/>
+                <button class="btn btn-primary">Я - Работодатель</button>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <p>Соискатели могут откликаться на вакансии либо оставлять собственные резюме.</p>
+
+            <form action="." method="post">{% csrf_token %}
+                <input type="hidden" name="role" value="APP"/>
+                <button class="btn btn-primary">Я - Соискатель</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
