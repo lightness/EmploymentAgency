@@ -3,3 +3,4 @@ from app.models import *
 
 admin.site.register(Applicant)
 admin.site.register(Employer)
+admin.site.register(Vacancy)

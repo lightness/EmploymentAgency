@@ -1,5 +1,60 @@
 {% extends 'layout/master.html' %}
 
 {% block content %}
-    Vacancies
+
+    <div class="page-header">
+        <h3>Список вакансий</h3>
+    </div>
+
+    {% if vacancies %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Организация</th>
+                    <th>Профессия</th>
+                    <th>Заработная плата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vacancy in vacancies %}
+                    <tr>
+                        <td>
+                            {{ vacancy.employer.title }}
+                        </td>
+                        <td>
+                            {{ vacancy.profession }}
+                        </td>
+                        <td>
+                            {% if vacancy.salary_min %}
+                                от {{ vacancy.salary_min }} {{ vacancy.salary_currency }}
+                            {% endif %}
+                            {% if vacancy.salary_max %}
+                                до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            {% if is_paginated %}
+            <ul class="pagination pagination-sm">
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li class='active'>
+                    <span class="page-current">{{ page_obj.number }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <h5>Вакансий нет</h5>
+    {% endif %}
+
 {% endblock %}

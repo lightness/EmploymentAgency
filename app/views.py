@@ -1,9 +1,11 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.template import RequestContext
 from app.models import *
+from app.forms import *
 from app.forms import UserWithEmailCreationForm
 
 
@@ -63,3 +65,35 @@ def view_register(request):
         'form': form
     }
     return render_to_response(template_name, context, context_instance=RequestContext(request))
+
+
+class VacanciesListView(ListView):
+    model = Vacancy
+    context_object_name = 'vacancies'
+    template_name = 'app/vacancy/list.html'
+    paginate_by = 20
+
+
+class VacancyCreateView(CreateView):
+    model = Vacancy
+    form_class = VacancyForm
+    context_object_name = 'vacancy'
+    template_name = 'app/vacancy/form.html'
+    success_url = reverse_lazy('Vacancies')
+
+    def get_form_kwargs(self):
+        new_kwargs = super(VacancyCreateView, self).get_form_kwargs()
+        new_kwargs['initial']['employer'] = Employer.objects.get(id=self.request.user.id)
+        return new_kwargs
+
+
+
+
+
+
+#def view_vacancies():
+#    pass
+#
+#
+#def view_CVs():
+#    pass

@@ -23,47 +23,49 @@ urlpatterns = patterns('',
 
 
     # http://имя_сайта/app/vacancies/
-    url(r"^vacancies/$", views.view_vacancies, name='Vacancies'),
+    url(r"^vacancies/$", views.VacanciesListView.as_view(), name='Vacancies'),
+    # http://имя_сайта/app/vacancies/pageN
+    url(r"^vacancies/page(?P<page>\d+)/$", views.VacanciesListView.as_view(), name='Vacancies'),
+
+    # http://имя_сайта/app/vacancy/
+    url(r"^vacancy/$", views.VacancyCreateView.as_view(), name='Vacancy'),
 
     # http://имя_сайта/app/vacancies/my/
-    url(r"^vacancies/my/$", views.view_my_vacancies, name='MyVacancies'),
+    #url(r"^vacancies/my/$", views.view_my_vacancies, name='MyVacancies'),
 
     # http://имя_сайта/app/vacancies/
-    url(r"^vacancy/create/$", views.view_create_vacancy, name='CreateVacancy'),
-
-    # http://имя_сайта/app/vacancy/id/update
-    url(r"^vacancy/(?P<id>\d+)/update/$", views.view_update_vacancy, name='UpdateVacancy'),
+    #url(r"^vacancy/(?P<id>\d+)/update/$", views.view_update_vacancy, name='UpdateVacancy'),
 
     # http://имя_сайта/app/vacancy/id/delete
-    url(r"^vacancy/(?P<id>\d+)/delete/$", views.view_delete_vacancy, name='DeleteVacancy'),
+    #url(r"^vacancy/(?P<id>\d+)/delete/$", views.view_delete_vacancy, name='DeleteVacancy'),
 
     # http://имя_сайта/app/vacancy/id/response
-    url(r"^vacancy/(?P<id>\d+)/response/$", views.view_response_for_vacancy, name='ResponseForVacancy'),
+    #url(r"^vacancy/(?P<id>\d+)/response/$", views.view_response_for_vacancy, name='ResponseForVacancy'),
 
     # http://имя_сайта/app/vacancy/id/response/delete
-    url(r"^vacancy/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_vacancy, name='DeleteResponseForVacancy'),
+    #url(r"^vacancy/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_vacancy, name='DeleteResponseForVacancy'),
 
 
 
     # http://имя_сайта/app/CVs/
-    url(r"^CVs/$", views.view_CVs, name='CVs'),
+    #url(r"^CVs/$", views.view_CVs, name='CVs'),
 
     # http://имя_сайта/app/CVs/my/
-    url(r"^CVs/$", views.view_my_CVs, name='MyCVs'),
+    #url(r"^CVs/$", views.view_my_CVs, name='MyCVs'),
 
     # http://имя_сайта/app/CV/create/
-    url(r"^CV/create/$", views.view_create_CV, name='CreateCV'),
+    #url(r"^CV/create/$", views.view_create_CV, name='CreateCV'),
 
     # http://имя_сайта/app/CV/id/update
-    url(r"^CV/(?P<id>\d+)/update/$", views.view_update_CV, name='UpdateCV'),
+    #url(r"^CV/(?P<id>\d+)/update/$", views.view_update_CV, name='UpdateCV'),
 
     # http://имя_сайта/app/CV/id/delete
-    url(r"^CV/(?P<id>\d+)/delete/$", views.view_delete_CV, name='DeleteCV'),
+    #url(r"^CV/(?P<id>\d+)/delete/$", views.view_delete_CV, name='DeleteCV'),
 
     # http://имя_сайта/app/CV/id/response
-    url(r"^CV/(?P<id>\d+)/response/$", views.view_response_for_CV, name='ResponseForCV'),
+    #url(r"^CV/(?P<id>\d+)/response/$", views.view_response_for_CV, name='ResponseForCV'),
 
     # http://имя_сайта/app/CV/id/response/delete
-    url(r"^CV/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_CV, name='DeleteResponseForCV'),
+    #url(r"^CV/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_CV, name='DeleteResponseForCV'),
 )
 
