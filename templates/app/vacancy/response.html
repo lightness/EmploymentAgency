@@ -3,13 +3,7 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>
-            {% if form.instance.pk %}
-                Редактрирование информации о вакансии "{{ form.instance.profession }}"
-            {% else %}
-                Добавление вакансии
-            {% endif %}
-        </h3>
+        <h3>Отклик на вакансию "{{ form.instance.profession }}"</h3>
     </div>
 
     <div class="row">
@@ -30,13 +24,7 @@
         <form id="form-vacancy" action="." method="post">{% csrf_token %}
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-primary">
-                {% if form.instance.pk %}
-                    Сохранить изменения
-                {% else %}
-                    Опубликовать вакансию
-                {% endif %}
-            </button>
+            <button type="submit" class="btn btn-primary">Отправить работодателю</button>
             <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
         </form>
     </div>

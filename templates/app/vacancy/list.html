@@ -45,16 +45,18 @@
                         {{ vacancy.date_publish }}
                     </td>
                     <td>
-                        {{ vacancy.responses_count }}
+                        {{ vacancy.vacancyresponse_set.count }}
                     </td>
                     <td>
                         {% if user.profile.is_employer %}
-                            {% ifequal vacancy.employer.id user.id %}
+                            {% ifequal vacancy.employer.profile user.profile %}
                                 <a class="btn btn-xs btn-warning" href="{% url 'UpdateVacancy' vacancy.id %}">Редактировать</a>
                                 <a class="btn btn-xs btn-danger" href="{% url 'DeleteVacancy' vacancy.id %}">Удалить</a>
                             {%  endifequal %}
                         {% else %}
-                            <a class="btn btn-xs btn-primary" href="{% url 'DeleteVacancy' vacancy.id %}">Откликнуться</a>
+{#                            {% if user.profile in vacancy.vacancyresponse_set__applicant %}#}
+                                <a class="btn btn-xs btn-primary" href="{% url 'VacancyResponse' vacancy.id %}">Откликнуться</a>
+{#                            {% endif %}#}
                         {% endif %}
                     </td>
                 </tr>

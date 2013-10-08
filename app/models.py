@@ -18,15 +18,25 @@ class Profile(models.Model):
     def is_employer(self):
         return Employer.objects.filter(profile=self).count() > 0
 
+    def __unicode__(self):
+        return self.user.username
+
+
+
 class Applicant(models.Model):
     profile = models.ForeignKey(Profile)
     full_name = models.CharField(max_length=100)
     birth_date = models.DateField(null=True, blank=True)
 
+    def __unicode__(self):
+        return self.profile.user.username
 
 class Employer(models.Model):
     profile = models.ForeignKey(Profile)
     title = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.profile.user.username
 
 
 CURRENCY = (
@@ -46,10 +56,7 @@ class Vacancy(models.Model):
     age_min = models.PositiveSmallIntegerField(blank=True, null=True)
     age_max = models.PositiveSmallIntegerField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)
-    date_publish = models.DateTimeField(auto_now=True) # Need test
-
-    def responses_count(self):
-        return 0
+    date_publish = models.DateTimeField(auto_now=True)
 
     def clean(self):
         if self.age_min and self.age_max:
@@ -61,6 +68,16 @@ class Vacancy(models.Model):
         if self.salary_min or self.salary_max:
             if not self.salary_currency:
                 raise ValidationError('Укажите денежную единицу для З/П')
+
+
+class VacancyResponse(models.Model):
+    applicant = models.ForeignKey(Applicant)
+    vacancy = models.ForeignKey(Vacancy)
+    text = models.TextField()
+    response_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("applicant", "vacancy")
 
 
 class CV(models.Model):

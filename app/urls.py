@@ -45,7 +45,7 @@ urlpatterns = patterns('',
     url(r"^vacancy/(?P<pk>\d+)/delete/$", login_required(views.VacancyDeleteView.as_view()), name='DeleteVacancy'),
 
     # http://имя_сайта/app/vacancy/id/response
-    #url(r"^vacancy/(?P<id>\d+)/response/$", views.view_response_for_vacancy, name='ResponseForVacancy'),
+    url(r"^vacancy/(?P<pk>\d+)/response/$", login_required(views.VacancyResponseCreateView.as_view()), name='VacancyResponse'),
 
     # http://имя_сайта/app/vacancy/id/response/delete
     #url(r"^vacancy/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_vacancy, name='DeleteResponseForVacancy'),
