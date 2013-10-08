@@ -6,19 +6,24 @@ from app import views
 
 urlpatterns = patterns('',
     # http://имя_сайта/app/about
-    url(r"^about/$", login_required(views.AboutView.as_view()), name='About'),
+    url(r"^about/$", views.AboutView.as_view(), name='About'),
 
     # http://имя_сайта/app/home
     url(r"^home/$", views.HomeView.as_view(), name='Home'),
 
+    # http://имя_сайта/app/access/denied/
+    url(r"^access/denied/$", views.AccessDeniedView.as_view(), name='AccessDenied'),
+
+
+
     # http://имя_сайта/app/home/applicant
-    url(r"^home/applicant/$", views.ApplicantHomeView.as_view(), name='ApplicantHome'),
+    url(r"^home/applicant/$", login_required(views.ApplicantHomeView.as_view()), name='ApplicantHome'),
 
     # http://имя_сайта/app/home/employer
-    url(r"^home/employer/$", views.EmployerHomeView.as_view(), name='EmployerHome'),
+    url(r"^home/employer/$", login_required(views.EmployerHomeView.as_view()), name='EmployerHome'),
 
     # http://имя_сайта/app/role/choose/
-    url(r"^role/choose/$", views.view_choose_role, name='ChooseRole'),
+    url(r"^role/choose/$", login_required(views.view_choose_role), name='ChooseRole'),
 
 
 
@@ -28,16 +33,16 @@ urlpatterns = patterns('',
     url(r"^vacancies/page(?P<page>\d+)/$", views.VacanciesListView.as_view(), name='Vacancies'),
 
     # http://имя_сайта/app/vacancy/
-    url(r"^vacancy/$", views.VacancyCreateView.as_view(), name='Vacancy'),
+    url(r"^vacancy/$", login_required(views.VacancyCreateView.as_view()), name='CreateVacancy'),
 
     # http://имя_сайта/app/vacancies/my/
     #url(r"^vacancies/my/$", views.view_my_vacancies, name='MyVacancies'),
 
     # http://имя_сайта/app/vacancies/
-    #url(r"^vacancy/(?P<id>\d+)/update/$", views.view_update_vacancy, name='UpdateVacancy'),
+    url(r"^vacancy/(?P<pk>\d+)/update/$", login_required(views.VacancyUpdateView.as_view()), name='UpdateVacancy'),
 
     # http://имя_сайта/app/vacancy/id/delete
-    #url(r"^vacancy/(?P<id>\d+)/delete/$", views.view_delete_vacancy, name='DeleteVacancy'),
+    url(r"^vacancy/(?P<pk>\d+)/delete/$", login_required(views.VacancyDeleteView.as_view()), name='DeleteVacancy'),
 
     # http://имя_сайта/app/vacancy/id/response
     #url(r"^vacancy/(?P<id>\d+)/response/$", views.view_response_for_vacancy, name='ResponseForVacancy'),

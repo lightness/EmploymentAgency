@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -10,8 +10,8 @@ from app.forms import UserWithEmailCreationForm
 
 
 def view_route_after_login(request):
-    employers = Employer.objects.filter(user__id=request.user.id)
-    applicants = Applicant.objects.filter(user__id=request.user.id)
+    employers = Employer.objects.filter(profile__user__id=request.user.id)
+    applicants = Applicant.objects.filter(profile__user__id=request.user.id)
     if len(employers) == 1:
         return HttpResponseRedirect(reverse('EmployerHome'))
     elif len(applicants) == 1:
@@ -21,6 +21,10 @@ def view_route_after_login(request):
 
 class AboutView(TemplateView):
     template_name = "about.html"
+
+
+class AccessDeniedView(TemplateView):
+    template_name = "access_denied.html"
 
 
 class HomeView(TemplateView):
@@ -40,11 +44,12 @@ def view_choose_role(request):
 
     if request.method == "POST":
         role = request.POST["role"]
+        profile = Profile.objects.create(user=request.user)
         if role == "EMP":
-            Employer.objects.create(user=request.user)
+            Employer.objects.create(profile=profile)
             return HttpResponseRedirect(reverse('EmployerHome'))
         elif role == "APP":
-            Applicant.objects.create(user=request.user)
+            Applicant.objects.create(profile=profile)
             return HttpResponseRedirect(reverse('ApplicantHome'))
         return HttpResponseRedirect(reverse('About'))
 
@@ -67,6 +72,11 @@ def view_register(request):
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 
+
+
+
+
+
 class VacanciesListView(ListView):
     model = Vacancy
     context_object_name = 'vacancies'
@@ -81,19 +91,85 @@ class VacancyCreateView(CreateView):
     template_name = 'app/vacancy/form.html'
     success_url = reverse_lazy('Vacancies')
 
+    def get(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyCreateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyCreateView, self).post(request, *args, **kwargs)
+
+    def redirect_if_denied(self):
+        profile = self.request.user.profile
+        if not profile.is_employer():
+            return HttpResponseRedirect(reverse('AccessDenied'))
+
     def get_form_kwargs(self):
         new_kwargs = super(VacancyCreateView, self).get_form_kwargs()
-        new_kwargs['initial']['employer'] = Employer.objects.get(id=self.request.user.id)
+        new_kwargs['initial']['employer'] = Employer.objects.get(profile=self.request.user.profile)
         return new_kwargs
 
 
+class VacancyUpdateView(UpdateView):
+    model = Vacancy
+    form_class = VacancyForm
+    context_object_name = 'vacancy'
+    template_name = 'app/vacancy/form.html'
+    success_url = reverse_lazy('Vacancies')
+
+    def get(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyUpdateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyUpdateView, self).post(request, *args, **kwargs)
+
+    def redirect_if_denied(self):
+        profile = self.request.user.profile
+        if not profile.is_employer():
+            return HttpResponseRedirect(reverse('AccessDenied'))
+        obj = super(VacancyUpdateView, self).get_object()
+        if profile.id != obj.employer.profile.id:
+            return HttpResponseRedirect(reverse('AccessDenied'))
 
 
+class VacancyDeleteView(DeleteView):
+    model = Vacancy
+    context_object_name = 'vacancy'
+    template_name = 'app/vacancy/delete.html'
+    success_url = reverse_lazy('Vacancies')
 
+    def get(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyDeleteView, self).get(request, *args, **kwargs)
 
-#def view_vacancies():
-#    pass
-#
-#
-#def view_CVs():
-#    pass
+    def post(self, request, *args, **kwargs):
+        redirect = self.redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            return super(VacancyDeleteView, self).post(request, *args, **kwargs)
+
+    def redirect_if_denied(self):
+        profile = self.request.user.profile
+        if not profile.is_employer():
+            return HttpResponseRedirect(reverse('AccessDenied'))
+        obj = super(VacancyDeleteView, self).get_object()
+        if profile.id != obj.employer.profile.id:
+            return HttpResponseRedirect(reverse('AccessDenied'))

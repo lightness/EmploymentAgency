@@ -13,7 +13,12 @@
         <input type="password" name="password" value="" id="password">
 
         <input type="submit" value="login"/>
-        <input type="hidden" name="next" value="{% url 'RouteAfterLogin' %}"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
+{#        {% if next %}#}
+{#            {{ next }}#}
+{#        {% else %}#}
+{#            {% url 'RouteAfterLogin' %}#}
+{#        {% endif %}"/>#}
     </form>
 
 {% endblock %}

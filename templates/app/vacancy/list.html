@@ -4,39 +4,64 @@
 
     <div class="page-header">
         <h3>Список вакансий</h3>
+
+        <div>
+            <a class="btn btn-success" href="{% url 'CreateVacancy' %}">Создать вакансию</a>
+        </div>
     </div>
 
+
+
     {% if vacancies %}
-        <table>
+        <table class="table table-bordered table-stripped">
             <thead>
-                <tr>
-                    <th>Организация</th>
-                    <th>Профессия</th>
-                    <th>Заработная плата</th>
-                </tr>
+            <tr>
+                <th>Организация</th>
+                <th>Профессия</th>
+                <th>Заработная плата</th>
+                <th>Дата подачи</th>
+                <th>Отклики</th>
+                <th>Действия</th>
+            </tr>
             </thead>
             <tbody>
-                {% for vacancy in vacancies %}
-                    <tr>
-                        <td>
-                            {{ vacancy.employer.title }}
-                        </td>
-                        <td>
-                            {{ vacancy.profession }}
-                        </td>
-                        <td>
-                            {% if vacancy.salary_min %}
-                                от {{ vacancy.salary_min }} {{ vacancy.salary_currency }}
-                            {% endif %}
-                            {% if vacancy.salary_max %}
-                                до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+            {% for vacancy in vacancies %}
+                <tr>
+                    <td>
+                        {{ vacancy.employer.title }}
+                    </td>
+                    <td>
+                        {{ vacancy.profession }}
+                    </td>
+                    <td>
+                        {% if vacancy.salary_min %}
+                            от {{ vacancy.salary_min }} {{ vacancy.salary_currency }}
+                        {% endif %}
+                        {% if vacancy.salary_max %}
+                            до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ vacancy.date_publish }}
+                    </td>
+                    <td>
+                        {{ vacancy.responses_count }}
+                    </td>
+                    <td>
+                        {% if user.profile.is_employer %}
+                            {% ifequal vacancy.employer.id user.id %}
+                                <a class="btn btn-xs btn-warning" href="{% url 'UpdateVacancy' vacancy.id %}">Редактировать</a>
+                                <a class="btn btn-xs btn-danger" href="{% url 'DeleteVacancy' vacancy.id %}">Удалить</a>
+                            {%  endifequal %}
+                        {% else %}
+                            <a class="btn btn-xs btn-primary" href="{% url 'DeleteVacancy' vacancy.id %}">Откликнуться</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
-            {% if is_paginated %}
+        {% if is_paginated %}
             <ul class="pagination pagination-sm">
                 {% if page_obj.has_previous %}
                     <li>

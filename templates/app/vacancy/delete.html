@@ -1,0 +1,16 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h3>Удаление вакансии</h3>
+    </div>
+
+    <h4>Вы действительно хотите удалить вакансию <b>{{ vacancy.profession }}</b>?</h4>
+    <form action="" method="post">{% csrf_token %}
+        <button class="btn btn-danger">Да</button>
+        <a href="{% url 'Vacancies' %}" class="btn btn-default">Нет</a>
+    </form>
+
+
+{% endblock %}

@@ -12,15 +12,20 @@ class Profile(models.Model):
     skype = models.CharField(max_length=50, null=True, blank=True)
     icq = models.IntegerField(max_length=9, null=True, blank=True)
 
+    def is_applicant(self):
+        return Applicant.objects.filter(profile=self).count() > 0
 
-class Applicant(Profile):
-    #profile = models.ForeignKey(Profile)
+    def is_employer(self):
+        return Employer.objects.filter(profile=self).count() > 0
+
+class Applicant(models.Model):
+    profile = models.ForeignKey(Profile)
     full_name = models.CharField(max_length=100)
     birth_date = models.DateField(null=True, blank=True)
 
 
-class Employer(Profile):
-    #profile = models.ForeignKey(Profile)
+class Employer(models.Model):
+    profile = models.ForeignKey(Profile)
     title = models.CharField(max_length=100)
 
 
@@ -41,7 +46,10 @@ class Vacancy(models.Model):
     age_min = models.PositiveSmallIntegerField(blank=True, null=True)
     age_max = models.PositiveSmallIntegerField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)
-    date_publish = models.DateField(auto_now=True) # Need test
+    date_publish = models.DateTimeField(auto_now=True) # Need test
+
+    def responses_count(self):
+        return 0
 
     def clean(self):
         if self.age_min and self.age_max:
