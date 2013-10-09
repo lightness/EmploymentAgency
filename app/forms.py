@@ -36,7 +36,7 @@ class VacancyForm(forms.ModelForm):
 
 class VacancyResponseForm(forms.ModelForm):
     class Meta:
-        model = VacancyResponse
+        model = Response
         fields = ( 'applicant', 'vacancy', 'text', )
         widgets = {
             'applicant': forms.HiddenInput(),

@@ -56,7 +56,7 @@ class Vacancy(models.Model):
     age_min = models.PositiveSmallIntegerField(blank=True, null=True)
     age_max = models.PositiveSmallIntegerField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)
-    date_publish = models.DateTimeField(auto_now=True)
+    publish_date = models.DateTimeField(auto_now=True)
 
     def clean(self):
         if self.age_min and self.age_max:
@@ -70,7 +70,7 @@ class Vacancy(models.Model):
                 raise ValidationError('Укажите денежную единицу для З/П')
 
 
-class VacancyResponse(models.Model):
+class Response(models.Model):
     applicant = models.ForeignKey(Applicant)
     vacancy = models.ForeignKey(Vacancy)
     text = models.TextField()

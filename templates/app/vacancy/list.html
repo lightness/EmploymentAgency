@@ -1,13 +1,17 @@
 {% extends 'layout/master.html' %}
 
+{% load filter_map %}
+{% load filter_attr %}
+
 {% block content %}
 
     <div class="page-header">
         <h3>Список вакансий</h3>
-
-        <div>
-            <a class="btn btn-success" href="{% url 'CreateVacancy' %}">Создать вакансию</a>
-        </div>
+        {% if user.profile.is_employer %}
+            <div>
+                <a class="btn btn-success" href="{% url 'CreateVacancy' %}">Создать вакансию</a>
+            </div>
+        {% endif %}
     </div>
 
 
@@ -42,21 +46,24 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ vacancy.date_publish }}
+                        {{ vacancy.publish_date }}
                     </td>
                     <td>
-                        {{ vacancy.vacancyresponse_set.count }}
+                        {{ vacancy.response_set.count }}
                     </td>
                     <td>
+                        <a class="btn btn-xs btn-success" href="{% url 'ShowVacancy' vacancy.id %}">Просмотр</a>
                         {% if user.profile.is_employer %}
                             {% ifequal vacancy.employer.profile user.profile %}
                                 <a class="btn btn-xs btn-warning" href="{% url 'UpdateVacancy' vacancy.id %}">Редактировать</a>
                                 <a class="btn btn-xs btn-danger" href="{% url 'DeleteVacancy' vacancy.id %}">Удалить</a>
                             {%  endifequal %}
                         {% else %}
-{#                            {% if user.profile in vacancy.vacancyresponse_set__applicant %}#}
-                                <a class="btn btn-xs btn-primary" href="{% url 'VacancyResponse' vacancy.id %}">Откликнуться</a>
-{#                            {% endif %}#}
+                            {% if user.profile in vacancy.response_set.all|map:"applicant"|map:"profile" %}
+                                <a class="btn btn-xs btn-success" href="{% url 'ShowResponse' vacancy.id %}">Просмотр отклика</a>
+                            {% else %}
+                                <a class="btn btn-xs btn-primary" href="{% url 'CreateResponse' vacancy.id %}">Откликнуться</a>
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>

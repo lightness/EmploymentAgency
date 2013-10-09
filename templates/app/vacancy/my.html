@@ -1,5 +1,80 @@
 {% extends 'layout/master.html' %}
 
 {% block content %}
-    My CVs
+
+    <div class="page-header">
+        <h3>Мои вакансии</h3>
+        {% if user.profile.is_employer %}
+            <div>
+                <a class="btn btn-success" href="{% url 'CreateVacancy' %}">Создать вакансию</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if vacancies %}
+        <table class="table table-bordered table-stripped">
+            <thead>
+            <tr>
+                <th>Организация</th>
+                <th>Профессия</th>
+                <th>Заработная плата</th>
+                <th>Дата подачи</th>
+                <th>Отклики</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for vacancy in vacancies %}
+                <tr>
+                    <td>
+                        {{ vacancy.employer.title }}
+                    </td>
+                    <td>
+                        {{ vacancy.profession }}
+                    </td>
+                    <td>
+                        {% if vacancy.salary_min %}
+                            от {{ vacancy.salary_min }} {{ vacancy.salary_currency }}
+                        {% endif %}
+                        {% if vacancy.salary_max %}
+                            до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ vacancy.publish_date }}
+                    </td>
+                    <td>
+                        {{ vacancy.response_set.count }}
+                    </td>
+                    <td>
+                        <a class="btn btn-xs btn-success" href="{% url 'ShowVacancy' vacancy.id %}">Просмотр</a>
+                        <a class="btn btn-xs btn-warning" href="{% url 'UpdateVacancy' vacancy.id %}">Редактировать</a>
+                        <a class="btn btn-xs btn-danger" href="{% url 'DeleteVacancy' vacancy.id %}">Удалить</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if is_paginated %}
+            <ul class="pagination pagination-sm">
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li class='active'>
+                    <span class="page-current">{{ page_obj.number }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <h5>Вакансий нет</h5>
+    {% endif %}
+
+
 {% endblock %}

@@ -1,5 +1,14 @@
 {% extends 'layout/master.html' %}
 
 {% block content %}
-    Applicant Home
+
+    <div class="row">
+        <div class="col-md-6 ">{% include 'parts/applicant_home/vacancies.html' %}</div>
+        <div class="col-md-6 ">{% include 'parts/applicant_home/my_responses.html' %}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 ">{% include 'parts/applicant_home/CVs.html' %}</div>
+        <div class="col-md-6 ">{% include 'parts/applicant_home/my_CVs.html' %}</div>
+    </div>
+
 {% endblock %}

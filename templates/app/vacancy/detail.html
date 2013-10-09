@@ -1,0 +1,49 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h3>Вакансия "{{ vacancy.profession }}" от {{ vacancy.employer.title }}</h3>
+    </div>
+
+    <div class="row">
+        <dl class="dl-horizontal">
+            <dt>Организация</dt>
+            <dd>{{ vacancy.employer.title }}</dd>
+            <dt>Профессия</dt>
+            <dd>{{ vacancy.profession }}</dd>
+            {% if vacancy.age_min or vacancy.age_max %}
+                <dt>Возраст</dt>
+                <dd>
+                    {% if vacancy.age_min %}от {{ vacancy.age_min }}{% endif %}
+                    {% if vacancy.age_max %}до {{ vacancy.age_max }}{% endif %}
+                </dd>
+            {% endif %}
+            {% if vacancy.salary_min or vacancy.salary_max %}
+                <dt>Заработная плата</dt>
+                <dd>
+                    {% if vacancy.salary_min %}от {{ vacancy.salary_min }}{% endif %}
+                    {% if vacancy.salary_max %}до {{ vacancy.salary_max }}{% endif %}
+                    {{ vacancy.salary_currency }}
+                </dd>
+            {% endif %}
+            {% if vacancy.details %}
+                <dt>Дополнительная информация</dt>
+                <dd>{{ vacancy.details }}</dd>
+            {% endif %}
+            <dt>Опубликовано</dt>
+            <dd>{{ vacancy.publish_date }}</dd>
+        </dl>
+    </div>
+
+    <div class="row">
+        {% if user.profile.is_applicant %}
+            <a class="btn btn-success" href="{% url 'CreateResponse' vacancy.id %}">Откликнуться</a>
+        {% endif %}
+        <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
+        {% if user.profile.is_employer %}
+            <a class="btn btn-default" href="{% url 'MyVacancies' %}">К списку моих вакансий</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
