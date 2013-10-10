@@ -95,18 +95,24 @@ class DenyIfNotApplicantMixin(RedirectIfDenyMixin):
 
 class DenyIfEmployerNotOwnerMixin(DenyIfNotEmployerMixin):
     def redirect_if_denied(self):
-        super(DenyIfEmployerNotOwnerMixin, self).redirect_if_denied()
-        obj = super(DenyIfEmployerNotOwnerMixin, self).get_object()
-        if self.request.user.profile.id != obj.employer.profile.id:
-            return HttpResponseRedirect(reverse('AccessDenied'))
+        redirect = super(DenyIfEmployerNotOwnerMixin, self).redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            obj = super(DenyIfEmployerNotOwnerMixin, self).get_object()
+            if self.request.user.profile.id != obj.employer.profile.id:
+                return HttpResponseRedirect(reverse('AccessDenied'))
 
 
 class DenyIfApplicantNotOwnerMixin(DenyIfNotApplicantMixin):
     def redirect_if_denied(self):
-        super(DenyIfApplicantNotOwnerMixin, self).redirect_if_denied()
-        obj = super(DenyIfApplicantNotOwnerMixin, self).get_object()
-        if self.request.user.profile.id != obj.applicant.profile.id:
-            return HttpResponseRedirect(reverse('AccessDenied'))
+        redirect = super(DenyIfApplicantNotOwnerMixin, self).redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            obj = super(DenyIfApplicantNotOwnerMixin, self).get_object()
+            if self.request.user.profile.id != obj.applicant.profile.id:
+                return HttpResponseRedirect(reverse('AccessDenied'))
 
 
 class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
@@ -128,10 +134,7 @@ class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
     template_name = "employer_home.html"
 
 
-class VacancyDetailView(DetailView):
-    model = Vacancy
-    context_object_name = 'vacancy'
-    template_name = 'app/vacancy/detail.html'
+
 
 
 class VacanciesListView(ListView):
@@ -171,10 +174,20 @@ class VacancyDeleteView(DenyIfEmployerNotOwnerMixin, DeleteView):
 
 class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
     model = Response
-    form_class = VacancyResponseForm
+    form_class = ResponseForm
     context_object_name = 'response'
     template_name = 'app/vacancy/response.html'
     success_url = reverse_lazy('Vacancies')
+
+    def redirect_if_denied(self):
+        redirect = super(ResponseCreateView, self).redirect_if_denied()
+        if redirect:
+            return redirect
+        else:
+            vacancy = Vacancy.objects.get(pk=self.kwargs['pk'])
+            if Response.objects.filter(vacancy=vacancy,applicant__profile=self.request.user.profile).count() > 0:
+                my_response_id = Response.objects.get(vacancy=vacancy, applicant__profile=self.request.user.profile).id
+                return HttpResponseRedirect(reverse('ShowResponse', args=(my_response_id,)))
 
     def get_form_kwargs(self):
         new_kwargs = super(ResponseCreateView, self).get_form_kwargs()
@@ -210,3 +223,19 @@ class MyVacanciesListView(DenyIfNotEmployerMixin, ListView):
 
     def get_queryset(self):
         return Vacancy.objects.filter(employer__profile=self.request.user.profile)
+
+
+class VacancyDetailView(DetailView):
+    model = Vacancy
+    context_object_name = 'vacancy'
+    template_name = 'app/vacancy/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VacancyDetailView, self).get_context_data()
+        vacancy = kwargs['object']
+        context['responses'] = Response.objects.filter(vacancy=vacancy)
+        if self.request.user.is_authenticated():
+            if Response.objects.filter(vacancy=vacancy, applicant__profile=self.request.user.profile).count() > 0:
+                context['my_response'] = Response.objects.get(vacancy=vacancy, applicant__profile=self.request.user.profile)
+        return context
+

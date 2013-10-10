@@ -34,7 +34,7 @@ class VacancyForm(forms.ModelForm):
         }
 
 
-class VacancyResponseForm(forms.ModelForm):
+class ResponseForm(forms.ModelForm):
     class Meta:
         model = Response
         fields = ( 'applicant', 'vacancy', 'text', )

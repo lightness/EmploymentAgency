@@ -1,7 +1,6 @@
 {% extends 'layout/master.html' %}
 
 {% load filter_map %}
-{% load filter_attr %}
 
 {% block content %}
 
@@ -58,7 +57,7 @@
                                 <a class="btn btn-xs btn-warning" href="{% url 'UpdateVacancy' vacancy.id %}">Редактировать</a>
                                 <a class="btn btn-xs btn-danger" href="{% url 'DeleteVacancy' vacancy.id %}">Удалить</a>
                             {%  endifequal %}
-                        {% else %}
+                        {% elif user.profile.is_applicant %}
                             {% if user.profile in vacancy.response_set.all|map:"applicant"|map:"profile" %}
                                 <a class="btn btn-xs btn-success" href="{% url 'ShowResponse' vacancy.id %}">Просмотр отклика</a>
                             {% else %}

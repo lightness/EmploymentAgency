@@ -1,5 +1,7 @@
 {% extends 'layout/master.html' %}
 
+{% load filter_map %}
+
 {% block content %}
 
     <div class="page-header">
@@ -36,8 +38,26 @@
         </dl>
     </div>
 
-    <div class="row">
-        {% if user.profile.is_applicant %}
+    {% ifequal user.profile vacancy.employer.profile %}
+        {% for r in responses %}
+            <p>{{ r.applicant }}</p>
+        {% empty %}
+            Откликов нет
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            <div>Список откликов доступен только владельцу вакансии</div>
+            <div>Общее число откликов на данную вакансию: <strong>{{ responses|length }}</strong></div>
+        </div>
+    {% endifequal %}
+
+    {% if my_response %}
+        <h4>Ваш отклик</h4>
+        <p>{{ my_response.text }}</p>
+    {% endif %}
+
+    <div class="row text-center">
+        {% if user.profile.is_applicant and not user.profile in vacancy.response_set.all|map:"applicant"|map:"profile" %}
             <a class="btn btn-success" href="{% url 'CreateResponse' vacancy.id %}">Откликнуться</a>
         {% endif %}
         <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>

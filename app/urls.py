@@ -17,6 +17,9 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/home
     url(r"^home/$", views.HomeView.as_view(), name='Home'),
 
+    # http://имя_сайта/app/profile
+    url(r"^profile/$", views.HomeView.as_view(), name='Profile'),
+
     # http://имя_сайта/app/home/applicant
     url(r"^home/applicant/$", login_required(views.ApplicantHomeView.as_view()), name='ApplicantHome'),
 
@@ -53,11 +56,10 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/vacancy/response/id/
     url(r"^vacancy/response/(?P<pk>\d+)/$", login_required(views.ResponseDetailView.as_view()), name='ShowResponse'),
 
-    # http://имя_сайта/app/vacancy/responses/show
+    # http://имя_сайта/app/vacancy/responses/my/
     url(r"^vacancy/responses/my/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
 
-
-    # http://имя_сайта/app/vacancy/id/response/delete
+    # http://имя_сайта/app/vacancy/id/response/delete/
     #url(r"^vacancy/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_vacancy, name='DeleteResponseForVacancy'),
 
     # http://имя_сайта/app/vacancies/my/
