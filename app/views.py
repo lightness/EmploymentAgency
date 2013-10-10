@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
@@ -29,6 +30,7 @@ class AccessDeniedView(TemplateView):
 
 class HomeView(TemplateView):
     template_name = "home.html"
+
 
 def view_choose_role(request):
     template_name = "choose_role.html"
@@ -119,22 +121,24 @@ class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
     template_name = "applicant_home.html"
     cnt_last_vacancies = 3
     cnt_my_last_responses = 3
+    cnt_my_last_CVs = 3
 
     def get_context_data(self, **kwargs):
         last_vacancies = Vacancy.objects.order_by('-publish_date')[:self.cnt_last_vacancies]
-        my_last_responses = Response.objects.filter(applicant__profile=self.request.user.profile).order_by('-response_date')[:self.cnt_my_last_responses]
+        applicant = Applicant.objects.get(profile=self.request.user.profile)
+        my_last_responses = Response.objects.filter(applicant=applicant).order_by('-response_date')[:self.cnt_my_last_responses]
+        my_last_CVs = CV.objects.filter(applicant=applicant).order_by('-publish_date')[:self.cnt_my_last_CVs]
 
         context = super(ApplicantHomeView, self).get_context_data()
         context['last_vacancies'] = last_vacancies
         context['my_last_responses'] = my_last_responses
+        context['my_last_CVs'] = my_last_CVs
+        context['applicant'] = applicant
         return context
 
 
 class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
     template_name = "employer_home.html"
-
-
-
 
 
 class VacanciesListView(ListView):
@@ -185,7 +189,7 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
             return redirect
         else:
             vacancy = Vacancy.objects.get(pk=self.kwargs['pk'])
-            if Response.objects.filter(vacancy=vacancy,applicant__profile=self.request.user.profile).count() > 0:
+            if Response.objects.filter(vacancy=vacancy, applicant__profile=self.request.user.profile).count() > 0:
                 my_response_id = Response.objects.get(vacancy=vacancy, applicant__profile=self.request.user.profile).id
                 return HttpResponseRedirect(reverse('ShowResponse', args=(my_response_id,)))
 
@@ -236,6 +240,98 @@ class VacancyDetailView(DetailView):
         context['responses'] = Response.objects.filter(vacancy=vacancy)
         if self.request.user.is_authenticated():
             if Response.objects.filter(vacancy=vacancy, applicant__profile=self.request.user.profile).count() > 0:
-                context['my_response'] = Response.objects.get(vacancy=vacancy, applicant__profile=self.request.user.profile)
+                context['my_response'] = Response.objects.get(vacancy=vacancy,
+                                                              applicant__profile=self.request.user.profile)
         return context
 
+
+def view_update_my_profile(request):
+    template_name = 'app/profile.html'
+
+    profile = request.user.profile
+    profile_form = ProfileForm(request.POST or None, instance=profile)
+
+    if profile.is_applicant():
+        applicant = Applicant.objects.get(profile=profile)
+        about_me_form = ApplicantForm(request.POST or None, instance=applicant)
+    else:
+        employer = Employer.objects.get(profile=profile)
+        about_me_form = EmployerForm(request.POST or None, instance=employer)
+
+    if request.method == 'POST':
+        valid = True
+
+        if profile_form.is_valid():
+            profile_form.save()
+        else:
+            valid = False
+
+        if about_me_form.is_valid():
+            about_me_form.save()
+        else:
+            valid = False
+
+        if valid:
+            return HttpResponseRedirect(reverse('UpdateProfile'))
+
+    context = {
+        'profile': profile_form,
+        'about_me': about_me_form
+    }
+    return render_to_response(template_name, context, context_instance=RequestContext(request))
+
+# ##############################################
+
+class CvCreateView(DenyIfNotApplicantMixin, CreateView):
+    model = CV
+    form_class = CvForm
+    context_object_name = 'cv'
+    template_name = 'app/CV/form.html'
+    success_url = reverse_lazy('MyCVs')
+
+    def get_form_kwargs(self):
+        new_kwargs = super(CvCreateView, self).get_form_kwargs()
+        new_kwargs['initial']['applicant'] = Applicant.objects.get(profile=self.request.user.profile)
+        return new_kwargs
+
+
+class CvUpdateView(DenyIfApplicantNotOwnerMixin, UpdateView):
+    model = CV
+    form_class = CvForm
+    context_object_name = 'cv'
+    template_name = 'app/CV/form.html'
+    success_url = reverse_lazy('MyCVs')
+
+
+class CvListView(ListView):
+    model = CV
+    context_object_name = 'cvs'
+    template_name = 'app/CV/list.html'
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super(CvListView, self).get_context_data()
+        context['page_header'] = 'Все резюме'
+        return context
+
+
+class MyCvListView(DenyIfNotApplicantMixin, ListView):
+    model = CV
+    context_object_name = 'cvs'
+    template_name = 'app/CV/list.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return CV.objects.filter(applicant__profile=self.request.user.profile)
+
+    def get_context_data(self, **kwargs):
+        context = super(MyCvListView, self).get_context_data()
+        context['page_header'] = 'Мои резюме'
+        return context
+
+
+class CvDeleteView(DenyIfApplicantNotOwnerMixin, ListView):
+    model = CV
+    context_object_name = 'cvs'
+    template_name = 'app/CV/delete.html'
+    success_url = reverse_lazy('MyCVs')

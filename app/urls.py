@@ -17,8 +17,8 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/home
     url(r"^home/$", views.HomeView.as_view(), name='Home'),
 
-    # http://имя_сайта/app/profile
-    url(r"^profile/$", views.HomeView.as_view(), name='Profile'),
+    # http://имя_сайта/app/profile/my/update/
+    url(r"^profile/my/update/$", login_required(views.view_update_my_profile), name='UpdateProfile'),
 
     # http://имя_сайта/app/home/applicant
     url(r"^home/applicant/$", login_required(views.ApplicantHomeView.as_view()), name='ApplicantHome'),
@@ -59,32 +59,24 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/vacancy/responses/my/
     url(r"^vacancy/responses/my/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
 
-    # http://имя_сайта/app/vacancy/id/response/delete/
-    #url(r"^vacancy/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_vacancy, name='DeleteResponseForVacancy'),
-
     # http://имя_сайта/app/vacancies/my/
-    url(r"^vacancies/my/$", views.MyVacanciesListView.as_view(), name='MyVacancies'),
+    url(r"^vacancies/my/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
 
 
     # http://имя_сайта/app/CVs/
-    #url(r"^CVs/$", views.view_CVs, name='CVs'),
+    url(r"^CVs/$", views.CvListView.as_view(), name='CVs'),
 
     # http://имя_сайта/app/CVs/my/
-    #url(r"^CVs/$", views.view_my_CVs, name='MyCVs'),
+    url(r"^CVs/my/$", login_required(views.MyCvListView.as_view()), name='MyCVs'),
 
     # http://имя_сайта/app/CV/create/
-    #url(r"^CV/create/$", views.view_create_CV, name='CreateCV'),
+    url(r"^CV/create/$", login_required(views.CvCreateView.as_view()), name='CreateCV'),
 
     # http://имя_сайта/app/CV/id/update
-    #url(r"^CV/(?P<id>\d+)/update/$", views.view_update_CV, name='UpdateCV'),
+    url(r"^CV/(?P<pk>\d+)/update/$", login_required(views.CvUpdateView.as_view()), name='UpdateCV'),
 
     # http://имя_сайта/app/CV/id/delete
-    #url(r"^CV/(?P<id>\d+)/delete/$", views.view_delete_CV, name='DeleteCV'),
+    url(r"^CV/(?P<pk>\d+)/delete/$", login_required(views.CvDeleteView.as_view()), name='DeleteCV'),
 
-    # http://имя_сайта/app/CV/id/response
-    #url(r"^CV/(?P<id>\d+)/response/$", views.view_response_for_CV, name='ResponseForCV'),
-
-    # http://имя_сайта/app/CV/id/response/delete
-    #url(r"^CV/(?P<id>\d+)/response/delete/$", views.view_delete_response_for_CV, name='DeleteResponseForCV'),
 )
 

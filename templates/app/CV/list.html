@@ -1,5 +1,63 @@
 {% extends 'layout/master.html' %}
 
 {% block content %}
-    CVs
+
+    <div class="page-header">
+        <h3>{{ page_header }}</h3>
+        {% if user.profile.is_applicant %}
+            <div>
+                <a class="btn btn-success" href="{% url 'CreateCV' %}">Создать резюме</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if cvs %}
+        <table class="table table-bordered table-stripped">
+            <thead>
+            <tr>
+                <th>Соискатель</th>
+                <th>Профессия</th>
+                <th>Возраст</th>
+                <th>Стаж</th>
+                <th>Дата подачи</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for cv in cvs %}
+                    <tr>
+                        <td>{{ cv.applicant.full_name }}</td>
+                        <td>{{ cv.profession }}</td>
+                        <td>{{ cv.applicant.age }}</td>
+                        <td>{{ cv.experience }}</td>
+                        <td>{{ cv.publish_date }}</td>
+                        <td>
+                            :)
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if is_paginated %}
+            <ul class="pagination pagination-sm">
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li class='active'>
+                    <span class="page-current">{{ page_obj.number }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="{% url 'Vacancies' page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <h5>Вакансий нет</h5>
+    {% endif %}
+
+
 {% endblock %}

@@ -17,10 +17,7 @@ class UserWithEmailCreationForm(UserCreationForm):
 class VacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
-        fields = (
-            'employer', 'profession', 'position', 'salary_currency', 'salary_min', 'salary_max', 'age_min', 'age_max',
-            'details',
-        )
+        exclude = ('publish_date',)
         widgets = {
             'employer': forms.HiddenInput(),
             'profession': forms.TextInput(),
@@ -37,9 +34,58 @@ class VacancyForm(forms.ModelForm):
 class ResponseForm(forms.ModelForm):
     class Meta:
         model = Response
-        fields = ( 'applicant', 'vacancy', 'text', )
+        exclude = ()
         widgets = {
             'applicant': forms.HiddenInput(),
             'vacancy': forms.HiddenInput(),
             'text': forms.Textarea()
+        }
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ()
+        widgets = {
+            'user': forms.HiddenInput(),
+            'phone1': forms.TextInput(),
+            'phone2': forms.TextInput(),
+            'email': forms.TextInput(),
+            'skype': forms.TextInput(),
+            'icq': forms.TextInput()
+        }
+
+
+class ApplicantForm(forms.ModelForm):
+    class Meta:
+        model = Applicant
+        exclude = ()
+        widgets = {
+            'profile': forms.HiddenInput(),
+            'full_name': forms.TextInput(),
+            'birth_date': forms.DateInput()
+        }
+
+
+class EmployerForm(forms.ModelForm):
+    class Meta:
+        model = Employer
+        exclude = ()
+        widgets = {
+            'profile': forms.HiddenInput(),
+            'title': forms.TextInput()
+        }
+
+
+class CvForm(forms.ModelForm):
+    class Meta:
+        model = CV
+        exclude = ('publish_date',)
+        widgets = {
+            'applicant': forms.HiddenInput(),
+            'profession': forms.TextInput(),
+            'salary_min': forms.NumberInput(),
+            'salary_currency': forms.Select(),
+            'experience': forms.NumberInput(),
+            'details': forms.Textarea()
         }

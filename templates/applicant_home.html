@@ -2,13 +2,15 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-md-6 ">{% include 'parts/applicant_home/vacancies.html' %}</div>
-        <div class="col-md-6 ">{% include 'parts/applicant_home/my_responses.html' %}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 ">{% include 'parts/applicant_home/profile.html' %}</div>
-        <div class="col-md-6 ">{% include 'parts/applicant_home/my_CVs.html' %}</div>
-    </div>
+    <table class="td-to-top">
+        <tr class="row">
+            <td class="col-md-6 alert alert-info">{% include 'parts/applicant_home/vacancies.html' %}</td>
+            <td class="col-md-6 alert alert-info">{% include 'parts/applicant_home/my_responses.html' %}</td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-6 alert alert-info">{% include 'parts/applicant_home/profile.html' %}</td>
+            <td class="col-md-6 alert alert-info">{% include 'parts/applicant_home/my_CVs.html' %}</td>
+        </tr>
+    </table>
 
 {% endblock %}

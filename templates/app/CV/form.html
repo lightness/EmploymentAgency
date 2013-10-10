@@ -1,5 +1,44 @@
 {% extends 'layout/master.html' %}
 
 {% block content %}
-    Create Vacancy
+
+    <div class="page-header">
+        <h3>
+            {% if form.instance.pk %}
+                Редактрирование резюме "{{ form.instance.profession }}"
+            {% else %}
+                Создание резюме
+            {% endif %}
+        </h3>
+    </div>
+
+    <div class="row">
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <b>Исправьте следующие ошибки:</b>
+                {{ form.non_field_errors }}
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><b>{{ field.label }}</b> - {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form action="." method="post">{% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">
+                {% if form.instance.pk %}
+                    Сохранить изменения
+                {% else %}
+                    Опубликовать резюме
+                {% endif %}
+            </button>
+            <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
+        </form>
+    </div>
+
 {% endblock %}

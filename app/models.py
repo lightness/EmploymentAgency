@@ -2,7 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
+from datetime import date
+import math
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
@@ -27,6 +28,11 @@ class Applicant(models.Model):
     profile = models.ForeignKey(Profile)
     full_name = models.CharField(max_length=100)
     birth_date = models.DateField(null=True, blank=True)
+
+    def age(self):
+        if self.birth_date is None:
+            return None
+        return int((date.today() - self.birth_date).days / 365.25)
 
     def __unicode__(self):
         return self.profile.user.username
@@ -86,7 +92,7 @@ class CV(models.Model):
     salary_min = models.PositiveIntegerField(blank=True, null=True)
     salary_currency = models.CharField(max_length=10, choices=CURRENCY, blank=True, null=True)
     experience = models.PositiveSmallIntegerField(blank=True, null=True)
-    age = models.PositiveSmallIntegerField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)
+    publish_date = models.DateTimeField(auto_now=True)
 
 

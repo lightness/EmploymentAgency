@@ -6,6 +6,10 @@
     margin-top: 20px !important;
 }
 
+table.td-to-top td{
+    vertical-align: top;
+}
+
 /* -------------- login.html --------------- */
 #form-signin {
     max-width: 330px;
