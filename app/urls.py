@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/profile/my/update/
     url(r"^profile/my/update/$", login_required(views.view_update_my_profile), name='UpdateProfile'),
 
+    # http://имя_сайта/app/profile/id/
+    url(r"^profile/(?P<pk>\d+)/$", login_required(views.ProfileDetailView.as_view()), name='ShowProfile'),
+
     # http://имя_сайта/app/home/applicant
     url(r"^home/applicant/$", login_required(views.ApplicantHomeView.as_view()), name='ApplicantHome'),
 
@@ -76,7 +79,7 @@ urlpatterns = patterns('',
     url(r"^CV/(?P<pk>\d+)/update/$", login_required(views.CvUpdateView.as_view()), name='UpdateCV'),
 
     # http://имя_сайта/app/CV/id/
-    url(r"^CV/(?P<pk>\d+)/$", login_required(views.CvDetailView.as_view()), name='ShowCV'),
+    url(r"^CV/(?P<pk>\d+)/$", views.CvDetailView.as_view(), name='ShowCV'),
 
     # http://имя_сайта/app/CV/id/delete
     url(r"^CV/(?P<pk>\d+)/delete/$", login_required(views.CvDeleteView.as_view()), name='DeleteCV'),

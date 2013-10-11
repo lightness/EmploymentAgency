@@ -50,7 +50,11 @@
 
         <div class="text-center">
             <button class="btn btn-success">Сохранить</button>
-            <a class="btn btn-default" href="{% url 'Home' %}">Домой</a>
+            {% if user.profile.is_applicant %}
+                <a class="btn btn-default" href="{% url 'ApplicantHome' %}">Домой</a>
+            {% elif user.profile.is_employer %}
+                <a class="btn btn-default" href="{% url 'EmployerHome' %}">Домой</a>
+            {% endif %}
         </div>
 
     </form>

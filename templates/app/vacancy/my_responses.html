@@ -18,25 +18,21 @@
             </tr>
             </thead>
             <tbody>
-                {% for response in responses %}
-                    <tr>
-                        <td>
-                            {{ response.vacancy.profession }}
-                        </td>
-                        <td>
+            {% for response in responses %}
+                <tr>
+                    <td>{{ response.vacancy.profession }}</td>
+                    <td>
+                        <a href="{% url 'ShowProfile' response.vacancy.employer.profile.id %}">
                             {{ response.vacancy.employer.title }}
-                        </td>
-                        <td>
-                            {{ response.vacancy.publish_date }}
-                        </td>
-                        <td>
-                            {{ response.response_date }}
-                        </td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="{% url 'ShowResponse' response.id %}">Просмотр</a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                        </a>
+                    </td>
+                    <td>{{ response.vacancy.publish_date|date:"d.m.Y H:i:s" }}</td>
+                    <td>{{ response.response_date|date:"d.m.Y H:i:s" }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="{% url 'ShowResponse' response.id %}">Просмотр</a>
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     {% else %}

@@ -28,12 +28,8 @@
             <tbody>
             {% for vacancy in vacancies %}
                 <tr>
-                    <td>
-                        {{ vacancy.employer.title }}
-                    </td>
-                    <td>
-                        {{ vacancy.profession }}
-                    </td>
+                    <td><a href="{% url 'ShowProfile' vacancy.employer.profile.id %}">{{ vacancy.employer.title }}</a></td>
+                    <td>{{ vacancy.profession }}</td>
                     <td>
                         {% if vacancy.salary_min %}
                             от {{ vacancy.salary_min }} {{ vacancy.salary_currency }}
@@ -42,12 +38,8 @@
                             до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
                         {% endif %}
                     </td>
-                    <td>
-                        {{ vacancy.publish_date }}
-                    </td>
-                    <td>
-                        {{ vacancy.response_set.count }}
-                    </td>
+                    <td>{{ vacancy.publish_date }}</td>
+                    <td>{{ vacancy.response_set.count }}</td>
                     <td>
                         <a class="btn btn-xs btn-success" href="{% url 'ShowVacancy' vacancy.id %}">Просмотр</a>
                         {% if user.profile.is_employer %}

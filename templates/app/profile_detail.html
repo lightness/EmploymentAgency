@@ -1,0 +1,43 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h3>
+            {% if employer %}
+                Профиль работодателя: {{ employer.title|default:employer }}
+            {% elif applicant %}
+                Профиль соискателя: {{ applicant.full_name|default:applicant }}
+            {% endif %}
+        </h3>
+    </div>
+
+    <div>
+        <dl class="dl-horizontal">
+            {% if employer %}
+                <dt>Организация</dt>
+                <dd>{{ employer.title|default:"Не указано" }}</dd>
+            {% elif applicant %}
+                <dt>ФИО</dt>
+                <dd>{{ applicant.full_name|default:"Не указано" }}</dd>
+                <dt>Возраст</dt>
+                <dd>{{ applicant.age|default:"Не указано" }}</dd>
+            {% endif %}
+            <dt>Телефон №1</dt>
+            <dd>{{ profile.phone1|default:"Не указано" }}</dd>
+            <dt>Телефон №2</dt>
+            <dd>{{ profile.phone2|default:"Не указано" }}</dd>
+            <dt>Контактный Email</dt>
+            <dd>{{ profile.email|default:"Не указано" }}</dd>
+            <dt>Контактный Skype</dt>
+            <dd>{{ profile.skype|default:"Не указано" }}</dd>
+            <dt>Контактный ICQ</dt>
+            <dd>{{ profile.icq|default:"Не указано" }}</dd>
+        </dl>
+    </div>
+
+    {% ifequal profile user.profile %}
+        <a class="btn btn-warning" href="{% url 'UpdateProfile' %}">Редактировать профиль</a>
+    {% endifequal %}
+
+{% endblock %}

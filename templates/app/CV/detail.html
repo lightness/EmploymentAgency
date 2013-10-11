@@ -1,1 +1,20 @@
-{{ cv }}
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h3>
+            Резюме соискателя {{ cv.applicant }}
+        </h3>
+    </div>
+
+    <p>{{ cv }}</p>
+
+    <div class="text-center">
+        <a class="btn btn-primary" href="{% url 'ShowProfile' cv.applicant.id %}">Профиль пользователя</a>
+        <a class="btn btn-default" href="{% url 'CVs' %}">Все резюме</a>
+        {% if user.profile.is_applicant %}
+            <a class="btn btn-default" href="{% url 'MyCVs' %}">Мои резюме</a>
+        {% endif %}
+    </div>
+{% endblock %}

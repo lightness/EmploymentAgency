@@ -13,32 +13,72 @@
     </div>
 
     <div class="row">
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <b>Исправьте следующие ошибки:</b>
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li><b>{{ field.label }}</b> - {{ error }}</li>
+        <div class="col-md-offset-3 col-md-6">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <b>Исправьте следующие ошибки:</b>
+                    {{ form.non_field_errors }}
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><b>{{ field.label }}</b> - {{ error }}</li>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
 
-        <form action="." method="post">{% csrf_token %}
-            {{ form.as_p }}
+            <form action="." method="post">{% csrf_token %}
+                {#            {{ form.as_p }}#}
+                {{ form.applicant }}
 
-            <button type="submit" class="btn btn-primary">
-                {% if form.instance.pk %}
-                    Сохранить изменения
-                {% else %}
-                    Опубликовать резюме
-                {% endif %}
-            </button>
-            <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
-        </form>
+                <div class="form-group">
+                    <label for="profession">Профессия</label>
+                    {{ form.profession }}
+                </div>
+
+                <div class="form-group">
+                    <label for="">Заработная плата</label>
+
+                    <div class="row">
+                        <div class="col-md-1 text-center">от</div>
+                        <div class="col-md-3">
+                            {{ form.salary_min }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.salary_currency }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Стаж</label>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form.experience }}
+                        </div>
+                        <div class="col-md-1">
+                            лет
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">Дополнительная информация</label>
+                    {{ form.details }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    {% if form.instance.pk %}
+                        Сохранить изменения
+                    {% else %}
+                        Опубликовать резюме
+                    {% endif %}
+                </button>
+                <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
+            </form>
+        </div>
     </div>
 
 {% endblock %}

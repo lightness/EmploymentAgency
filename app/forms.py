@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from app.models import *
+from app.widgets import *
 
 
 class UserWithEmailCreationForm(UserCreationForm):
@@ -20,14 +21,14 @@ class VacancyForm(forms.ModelForm):
         exclude = ('publish_date',)
         widgets = {
             'employer': forms.HiddenInput(),
-            'profession': forms.TextInput(),
-            'position': forms.TextInput(),
-            'salary_currency': forms.Select(),
-            'salary_min': forms.NumberInput(),
-            'salary_max': forms.NumberInput(),
-            'age_min': forms.NumberInput(),
-            'age_max': forms.NumberInput(),
-            'details': forms.Textarea()
+            'profession': BootstrapTextInput(),
+            'position': BootstrapTextInput(),
+            'salary_currency': BootstrapSelect(),
+            'salary_min': BootstrapNumberInput(),
+            'salary_max': BootstrapNumberInput(),
+            'age_min': BootstrapNumberInput(),
+            'age_max': BootstrapNumberInput(),
+            'details': BootstrapTextarea()
         }
 
 
@@ -83,9 +84,9 @@ class CvForm(forms.ModelForm):
         exclude = ('publish_date',)
         widgets = {
             'applicant': forms.HiddenInput(),
-            'profession': forms.TextInput(),
-            'salary_min': forms.NumberInput(),
-            'salary_currency': forms.Select(),
-            'experience': forms.NumberInput(),
-            'details': forms.Textarea()
+            'profession': BootstrapTextInput(),
+            'salary_min': BootstrapNumberInput(),
+            'salary_currency': BootstrapSelect(),
+            'experience': BootstrapNumberInput(),
+            'details': BootstrapTextarea()
         }

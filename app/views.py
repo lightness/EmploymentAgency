@@ -9,6 +9,7 @@ from app.models import *
 from app.forms import *
 from app.forms import UserWithEmailCreationForm
 
+RECORDS_PER_PAGE = 5
 
 def view_route_after_login(request):
     employers = Employer.objects.filter(profile__user__id=request.user.id)
@@ -161,7 +162,7 @@ class VacanciesListView(ListView):
     model = Vacancy
     context_object_name = 'vacancies'
     template_name = 'app/vacancy/list.html'
-    paginate_by = 20
+    paginate_by = RECORDS_PER_PAGE
 
     def get_context_data(self, **kwargs):
         context = super(VacanciesListView, self).get_context_data()
@@ -242,14 +243,14 @@ class MyResponsesListView(DenyIfNotApplicantMixin, ListView):
     model = Response
     context_object_name = 'responses'
     template_name = 'app/vacancy/my_responses.html'
-    paginate_by = 20
+    paginate_by = RECORDS_PER_PAGE
 
 
 class MyVacanciesListView(DenyIfNotEmployerMixin, ListView):
     model = Vacancy
     context_object_name = 'vacancies'
     template_name = 'app/vacancy/list.html'
-    paginate_by = 20
+    paginate_by = RECORDS_PER_PAGE
 
     def get_queryset(self):
         return Vacancy.objects.filter(employer__profile=self.request.user.profile)
@@ -275,6 +276,20 @@ class VacancyDetailView(DetailView):
                                                               applicant__profile=self.request.user.profile)
         return context
 
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    context_object_name = 'profile'
+    template_name = 'app/profile_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data()
+        profile = kwargs['object']
+        if profile.is_employer():
+            context['employer'] = Employer.objects.get(profile=profile)
+        elif profile.is_applicant():
+            context['applicant'] = Applicant.objects.get(profile=profile)
+        return context
 
 def view_update_my_profile(request):
     template_name = 'app/profile.html'
@@ -338,7 +353,7 @@ class CvListView(ListView):
     model = CV
     context_object_name = 'cvs'
     template_name = 'app/CV/list.html'
-    paginate_by = 20
+    paginate_by = RECORDS_PER_PAGE
 
     def get_context_data(self, **kwargs):
         context = super(CvListView, self).get_context_data()
@@ -350,7 +365,7 @@ class MyCvListView(DenyIfNotApplicantMixin, ListView):
     model = CV
     context_object_name = 'cvs'
     template_name = 'app/CV/list.html'
-    paginate_by = 20
+    paginate_by = RECORDS_PER_PAGE
 
     def get_queryset(self):
         return CV.objects.filter(applicant__profile=self.request.user.profile)
@@ -361,7 +376,7 @@ class MyCvListView(DenyIfNotApplicantMixin, ListView):
         return context
 
 
-class CvDeleteView(DenyIfApplicantNotOwnerMixin, ListView):
+class CvDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
     model = CV
     context_object_name = 'cvs'
     template_name = 'app/CV/delete.html'

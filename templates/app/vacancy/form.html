@@ -29,15 +29,15 @@
             {% endif %}
 
             <form id="form-vacancy" action="." method="post">{% csrf_token %}
-{#                {{ form.as_p }}#}
+
                 <div class="form-group">
                     <label for="profession">Профессия</label>
-                    <input type="text" id="profession" name="profession" class="form-control">
+                    {{ form.profession }}
                 </div>
 
                 <div class="form-group">
                     <label for="position">Должность</label>
-                    <input type="text" id="position" name="position" class="form-control">
+                    {{ form.position }}
                 </div>
 
                 <div class="form-group">
@@ -46,15 +46,14 @@
                     <div class="row">
                         <div class="col-md-1 text-center">от</div>
                         <div class="col-md-3">
-                            <input type="number" id="age_min" name="age_min" class="form-control">
+                            {{ form.age_min }}
                         </div>
                         <div class="col-md-1 text-center">до</div>
                         <div class="col-md-3">
-                            <input type="number" id="age_max" name="age_max" class="form-control">
+                            {{ form.age_max }}
                         </div>
                     </div>
                 </div>
-
 
                 <div class="form-group">
                     <label for="">Заработная плата</label>
@@ -62,26 +61,21 @@
                     <div class="row">
                         <div class="col-md-1 text-center">от</div>
                         <div class="col-md-3">
-                            <input type="number" id="salary_min" name="salary_min" class="form-control">
+                            {{ form.salary_min }}
                         </div>
                         <div class="col-md-1 text-center">до</div>
                         <div class="col-md-3">
-                            <input type="number" id="salary_max" name="salary_max" class="form-control">
+                            {{ form.salary_max }}
                         </div>
                         <div class="col-md-3">
-                            <select id="id_salary_currency" name="salary_currency" class="form-control">
-                                <option value="" selected="selected">---------</option>
-                                <option value="BLR">Бел. руб.</option>
-                                <option value="USD">$</option>
-                                <option value="EUR">₠</option>
-                            </select>
+                            {{ form.salary_currency }}
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="details">Дополнительная информация</label>
-                    <textarea type="text" id="details" name="details" class="form-control" rows="7"></textarea>
+                    {{ form.details }}
                 </div>
 
                 {{ form.employer }}
