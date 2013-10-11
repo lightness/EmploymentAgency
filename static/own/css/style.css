@@ -1,3 +1,7 @@
+textarea {
+    resize: none;
+}
+
 #page-container{
     padding-top: 60px;
 }
@@ -11,27 +15,15 @@ table.td-to-top td{
 }
 
 /* -------------- login.html --------------- */
-#form-signin {
+#form-login {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
 }
 
-#form-signin h2 {
-    margin-bottom: 30px;
-}
-
-#form-signin input {
-    margin-bottom: 15px;
-}
-
-#form-signin button {
-    margin-top: 30px;
-}
-
 /* -------------- register.html --------------- */
 #form-register {
-    max-width: 500px;
+    max-width: 330px;
     padding: 15px;
     margin: 0 auto;
 }

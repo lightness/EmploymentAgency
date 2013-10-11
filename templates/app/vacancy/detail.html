@@ -40,7 +40,25 @@
 
     {% ifequal user.profile vacancy.employer.profile %}
         {% for r in responses %}
-            <p>{{ r.applicant }}</p>
+            <div class="media alert alert-success">
+                <a class="pull-left" href="">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                </a>
+
+                <div class="pull-right text-center">
+                    <div>
+                        <small>{{ r.response_date|date:"H:i:s" }}</small>
+                    </div>
+                    <div>
+                        <small>{{ r.response_date|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{ r.applicant.full_name|default:r.applicant }}</h4>
+                    {{ r.text }}
+                </div>
+            </div>
         {% empty %}
             Откликов нет
         {% endfor %}
@@ -53,7 +71,25 @@
 
     {% if my_response %}
         <h4>Ваш отклик</h4>
-        <p>{{ my_response.text }}</p>
+        <div class="media alert alert-success">
+            <a class="pull-left" href="">
+                <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+            </a>
+
+            <div class="pull-right text-center">
+                <div>
+                    <small>{{ my_response.response_date|date:"H:i:s" }}</small>
+                </div>
+                <div>
+                    <small>{{ my_response.response_date|date:"d.m.Y" }}</small>
+                </div>
+            </div>
+
+            <div class="media-body">
+                <h4 class="media-heading">{{ my_response.applicant.full_name|default:my_response.applicant }}</h4>
+                {{ my_response.text }}
+            </div>
+        </div>
     {% endif %}
 
     <div class="row text-center">

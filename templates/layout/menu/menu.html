@@ -43,6 +43,12 @@
                                     Мои вакансии
                                 </a>
                             </li>
+                            <li>
+                                <a href="{% url 'CreateVacancy' %}">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    Создать вакансию
+                                </a>
+                            </li>
                         {% elif user.profile.is_applicant %}
                             <li>
                                 <a href="{% url 'MyResponses' %}">

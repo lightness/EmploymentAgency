@@ -5,15 +5,13 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>Список вакансий</h3>
+        <h3>{{ page_header }}</h3>
         {% if user.profile.is_employer %}
             <div>
                 <a class="btn btn-success" href="{% url 'CreateVacancy' %}">Создать вакансию</a>
             </div>
         {% endif %}
     </div>
-
-
 
     {% if vacancies %}
         <table class="table table-bordered table-stripped">

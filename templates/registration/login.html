@@ -2,23 +2,30 @@
 
 {% block content %}
 
-    {% if form.errors %}
-        <p class="error">Сожалеем, вы неправильно ввели логин или пароль</p>
-    {% endif %}
+    <form id="form-login" action='.' method='post'>{% csrf_token %}
+        <h2 class="text-center">Вход в систему</h2>
 
-    <form action='.' method='post'>{% csrf_token %}
-        <label for="username">Логин:</label>
-        <input type="text" name="username" value="" id="username">
-        <label for="password">Пароль:</label>
-        <input type="password" name="password" value="" id="password">
+        <div class="form-group">
+            <!-- Username -->
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" name="username" class="form-control">
+        </div>
 
-        <input type="submit" value="login"/>
+        <div class="form-group">
+            <!-- Password-->
+            <label for="password1">Пароль</label>
+            <input type="password" id="password" name="password" class="form-control">
+        </div>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">Сожалеем, вы неправильно ввели логин или пароль</div>
+        {% endif %}
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <a class="btn btn-default" href="{% url 'Register' %}">Зарегистрироваться</a>
+        </div>
         <input type="hidden" name="next" value="{{ next }}"/>
-{#        {% if next %}#}
-{#            {{ next }}#}
-{#        {% else %}#}
-{#            {% url 'RouteAfterLogin' %}#}
-{#        {% endif %}"/>#}
     </form>
 
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="page-header">
+    <div class="page-header text-center">
         <h3>
             {% if form.instance.pk %}
                 Редактрирование информации о вакансии "{{ form.instance.profession }}"
@@ -12,33 +12,92 @@
         </h3>
     </div>
 
-    <div class="row">
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <b>Исправьте следующие ошибки:</b>
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li><b>{{ field.label }}</b> - {{ error }}</li>
+    <div class="row" style="margin: 0 auto;">
+        <div class="col-md-offset-3 col-md-6">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <b>Исправьте следующие ошибки:</b>
+                    {{ form.non_field_errors }}
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><b>{{ field.label }}</b> - {{ error }}</li>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
 
-        <form id="form-vacancy" action="." method="post">{% csrf_token %}
-            {{ form.as_p }}
+            <form id="form-vacancy" action="." method="post">{% csrf_token %}
+{#                {{ form.as_p }}#}
+                <div class="form-group">
+                    <label for="profession">Профессия</label>
+                    <input type="text" id="profession" name="profession" class="form-control">
+                </div>
 
-            <button type="submit" class="btn btn-primary">
-                {% if form.instance.pk %}
-                    Сохранить изменения
-                {% else %}
-                    Опубликовать вакансию
-                {% endif %}
-            </button>
-            <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
-        </form>
+                <div class="form-group">
+                    <label for="position">Должность</label>
+                    <input type="text" id="position" name="position" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Возраст</label>
+
+                    <div class="row">
+                        <div class="col-md-1 text-center">от</div>
+                        <div class="col-md-3">
+                            <input type="number" id="age_min" name="age_min" class="form-control">
+                        </div>
+                        <div class="col-md-1 text-center">до</div>
+                        <div class="col-md-3">
+                            <input type="number" id="age_max" name="age_max" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="">Заработная плата</label>
+
+                    <div class="row">
+                        <div class="col-md-1 text-center">от</div>
+                        <div class="col-md-3">
+                            <input type="number" id="salary_min" name="salary_min" class="form-control">
+                        </div>
+                        <div class="col-md-1 text-center">до</div>
+                        <div class="col-md-3">
+                            <input type="number" id="salary_max" name="salary_max" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="id_salary_currency" name="salary_currency" class="form-control">
+                                <option value="" selected="selected">---------</option>
+                                <option value="BLR">Бел. руб.</option>
+                                <option value="USD">$</option>
+                                <option value="EUR">₠</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">Дополнительная информация</label>
+                    <textarea type="text" id="details" name="details" class="form-control" rows="7"></textarea>
+                </div>
+
+                {{ form.employer }}
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">
+                        {% if form.instance.pk %}
+                            Сохранить изменения
+                        {% else %}
+                            Опубликовать вакансию
+                        {% endif %}
+                    </button>
+                    <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
+                </div>
+            </form>
+        </div>
     </div>
 
 {% endblock %}

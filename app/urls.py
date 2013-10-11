@@ -75,6 +75,9 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/CV/id/update
     url(r"^CV/(?P<pk>\d+)/update/$", login_required(views.CvUpdateView.as_view()), name='UpdateCV'),
 
+    # http://имя_сайта/app/CV/id/
+    url(r"^CV/(?P<pk>\d+)/$", login_required(views.CvDetailView.as_view()), name='ShowCV'),
+
     # http://имя_сайта/app/CV/id/delete
     url(r"^CV/(?P<pk>\d+)/delete/$", login_required(views.CvDeleteView.as_view()), name='DeleteCV'),
 
