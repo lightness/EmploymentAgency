@@ -6,13 +6,20 @@ from datetime import date
 import math
 
 
+CURRENCY = (
+    ('BLR', 'Бел. руб.'),
+    ('USD', '$'),
+    ('EUR', '₠'),
+)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User)
-    phone1 = models.CharField(max_length=30, null=True, blank=True)
-    phone2 = models.CharField(max_length=30, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    skype = models.CharField(max_length=50, null=True, blank=True)
-    icq = models.IntegerField(max_length=9, null=True, blank=True)
+    phone1 = models.CharField(max_length=30, null=True, blank=True, verbose_name="Телефон №1")
+    phone2 = models.CharField(max_length=30, null=True, blank=True, verbose_name="Телефон №2")
+    email = models.EmailField(max_length=50, null=True, blank=True, verbose_name="Email")
+    skype = models.CharField(max_length=50, null=True, blank=True, verbose_name="Skype")
+    icq = models.IntegerField(max_length=9, null=True, blank=True, verbose_name="ICQ")
 
     def is_applicant(self):
         return Applicant.objects.filter(profile=self).count() > 0
@@ -26,8 +33,8 @@ class Profile(models.Model):
 
 class Applicant(models.Model):
     profile = models.ForeignKey(Profile)
-    full_name = models.CharField(max_length=100)
-    birth_date = models.DateField(null=True, blank=True)
+    full_name = models.CharField(max_length=100, verbose_name="Фамилия Имя Отчество")
+    birth_date = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
 
     def age(self):
         if self.birth_date is None:
@@ -71,17 +78,10 @@ class Applicant(models.Model):
 
 class Employer(models.Model):
     profile = models.ForeignKey(Profile)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, verbose_name="Наименование организации")
 
     def __unicode__(self):
         return self.profile.user.username
-
-
-CURRENCY = (
-    ('BLR', 'Бел. руб.'),
-    ('USD', '$'),
-    ('EUR', '₠'),
-)
 
 
 class Vacancy(models.Model):
@@ -145,11 +145,10 @@ class Vacancy(models.Model):
         return text
 
 
-
 class Response(models.Model):
     applicant = models.ForeignKey(Applicant)
     vacancy = models.ForeignKey(Vacancy)
-    text = models.TextField()
+    text = models.TextField(verbose_name='Текст отклика')
     response_date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
@@ -159,7 +158,7 @@ class Response(models.Model):
         unique_together = ("applicant", "vacancy")
 
 
-class CV(models.Model):
+class Application(models.Model):
     applicant = models.ForeignKey(Applicant)
     profession = models.CharField(max_length=100)
     salary_min = models.PositiveIntegerField(blank=True, null=True)

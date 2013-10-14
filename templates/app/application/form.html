@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="page-header">
+    <div class="page-header text-center">
         <h3>
             {% if form.instance.pk %}
                 Редактрирование резюме "{{ form.instance.profession }}"
@@ -69,14 +69,16 @@
                     {{ form.details }}
                 </div>
 
-                <button type="submit" class="btn btn-primary">
-                    {% if form.instance.pk %}
-                        Сохранить изменения
-                    {% else %}
-                        Опубликовать резюме
-                    {% endif %}
-                </button>
-                <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">
+                        {% if form.instance.pk %}
+                            Сохранить изменения
+                        {% else %}
+                            Опубликовать резюме
+                        {% endif %}
+                    </button>
+                    <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
+                </div>
             </form>
         </div>
     </div>

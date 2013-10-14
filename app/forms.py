@@ -39,7 +39,7 @@ class ResponseForm(forms.ModelForm):
         widgets = {
             'applicant': forms.HiddenInput(),
             'vacancy': forms.HiddenInput(),
-            'text': forms.Textarea()
+            'text': BootstrapTextarea()
         }
 
 
@@ -49,11 +49,11 @@ class ProfileForm(forms.ModelForm):
         exclude = ()
         widgets = {
             'user': forms.HiddenInput(),
-            'phone1': forms.TextInput(),
-            'phone2': forms.TextInput(),
-            'email': forms.TextInput(),
-            'skype': forms.TextInput(),
-            'icq': forms.TextInput()
+            'phone1': BootstrapTextInput(),
+            'phone2': BootstrapTextInput(),
+            'email': BootstrapTextInput(),
+            'skype': BootstrapTextInput(),
+            'icq': BootstrapTextInput()
         }
 
 
@@ -63,8 +63,8 @@ class ApplicantForm(forms.ModelForm):
         exclude = ()
         widgets = {
             'profile': forms.HiddenInput(),
-            'full_name': forms.TextInput(),
-            'birth_date': forms.DateInput()
+            'full_name': BootstrapTextInput(),
+            'birth_date': BootstrapDateInput()
         }
 
 
@@ -74,13 +74,13 @@ class EmployerForm(forms.ModelForm):
         exclude = ()
         widgets = {
             'profile': forms.HiddenInput(),
-            'title': forms.TextInput()
+            'title': BootstrapTextInput()
         }
 
 
 class CvForm(forms.ModelForm):
     class Meta:
-        model = CV
+        model = Application
         exclude = ('publish_date',)
         widgets = {
             'applicant': forms.HiddenInput(),

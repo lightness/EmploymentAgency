@@ -2,31 +2,35 @@
 
 {% block content %}
 
-    <div class="page-header">
-        <h3>Отклик на вакансию "{{ form.instance.profession }}"</h3>
+    <div class="page-header text-center">
+        <h3>Отклик на вакансию "{{ form.initial.vacancy.profession }}"</h3>
     </div>
 
     <div class="row">
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <b>Исправьте следующие ошибки:</b>
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li><b>{{ field.label }}</b> - {{ error }}</li>
+        <div class="col-md-offset-3 col-md-6">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <b>Исправьте следующие ошибки:</b>
+                    {{ form.non_field_errors }}
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><b>{{ field.label }}</b> - {{ error }}</li>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
 
-        <form id="form-vacancy" action="." method="post">{% csrf_token %}
-            {{ form.as_p }}
+            <form id="form-vacancy" action="." method="post">{% csrf_token %}
+                {{ form.as_p }}
 
-            <button type="submit" class="btn btn-primary">Отправить работодателю</button>
-            <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
-        </form>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Отправить работодателю</button>
+                    <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку вакансий</a>
+                </div>
+            </form>
+        </div>
     </div>
 
 {% endblock %}

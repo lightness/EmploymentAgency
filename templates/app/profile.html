@@ -2,14 +2,14 @@
 
 {% block content %}
 
-    <div class="page-header">
+    <div class="page-header text-center">
         <h3>Мой профиль</h3>
     </div>
 
     <form action="." method="post">{% csrf_token %}
         <div class="row">
             <div class="col-md-6">
-                <h4>Контактная информация</h4>
+                <h4 class="text-center">Контактная информация</h4>
 
                 {% if profile.errors %}
                     <div class="alert alert-danger">
@@ -28,7 +28,7 @@
                 {{ profile.as_p }}
             </div>
             <div class="col-md-6">
-                <h4>О себе</h4>
+                <h4 class="text-center">О себе</h4>
 
                 {% if about_me.errors %}
                     <div class="alert alert-danger">

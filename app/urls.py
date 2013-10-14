@@ -67,22 +67,22 @@ urlpatterns = patterns('',
 
 
     # http://имя_сайта/app/CVs/
-    url(r"^CVs/$", views.CvListView.as_view(), name='CVs'),
+    url(r"^CVs/$", views.ApplicationListView.as_view(), name='Applications'),
 
     # http://имя_сайта/app/CVs/my/
-    url(r"^CVs/my/$", login_required(views.MyCvListView.as_view()), name='MyCVs'),
+    url(r"^CVs/my/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
 
-    # http://имя_сайта/app/CV/create/
-    url(r"^CV/create/$", login_required(views.CvCreateView.as_view()), name='CreateCV'),
+    # http://имя_сайта/app/application/create/
+    url(r"^application/create/$", login_required(views.ApplicationCreateView.as_view()), name='CreateApplication'),
 
-    # http://имя_сайта/app/CV/id/update
-    url(r"^CV/(?P<pk>\d+)/update/$", login_required(views.CvUpdateView.as_view()), name='UpdateCV'),
+    # http://имя_сайта/app/application/id/update
+    url(r"^application/(?P<pk>\d+)/update/$", login_required(views.ApplicationUpdateView.as_view()), name='UpdateApplication'),
 
-    # http://имя_сайта/app/CV/id/
-    url(r"^CV/(?P<pk>\d+)/$", views.CvDetailView.as_view(), name='ShowCV'),
+    # http://имя_сайта/app/application/id/
+    url(r"^application/(?P<pk>\d+)/$", views.ApplicationDetailView.as_view(), name='ShowApplication'),
 
-    # http://имя_сайта/app/CV/id/delete
-    url(r"^CV/(?P<pk>\d+)/delete/$", login_required(views.CvDeleteView.as_view()), name='DeleteCV'),
+    # http://имя_сайта/app/application/id/delete
+    url(r"^application/(?P<pk>\d+)/delete/$", login_required(views.ApplicationDeleteView.as_view()), name='DeleteApplication'),
 
 )
 

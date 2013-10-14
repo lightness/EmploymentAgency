@@ -128,7 +128,7 @@ class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
         last_vacancies = Vacancy.objects.order_by('-publish_date')[:self.cnt_last_vacancies]
         applicant = Applicant.objects.get(profile=self.request.user.profile)
         my_last_responses = Response.objects.filter(applicant=applicant).order_by('-response_date')[:self.cnt_my_last_responses]
-        my_last_CVs = CV.objects.filter(applicant=applicant).order_by('-publish_date')[:self.cnt_my_last_CVs]
+        my_last_CVs = Application.objects.filter(applicant=applicant).order_by('-publish_date')[:self.cnt_my_last_CVs]
 
         context = super(ApplicantHomeView, self).get_context_data()
         context['last_vacancies'] = last_vacancies
@@ -145,7 +145,7 @@ class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
     cnt_my_last_vacancies = 3
 
     def get_context_data(self, **kwargs):
-        last_CVs = CV.objects.order_by('-publish_date')[:self.cnt_last_CVs]
+        last_CVs = Application.objects.order_by('-publish_date')[:self.cnt_last_CVs]
         employer = Employer.objects.get(profile=self.request.user.profile)
         last_responses_for_my_vacancies = Response.objects.filter(vacancy__employer=employer).order_by('-response_date')[:self.cnt_last_responses_for_my_vacancies]
         my_last_vacancies = Vacancy.objects.filter(employer=employer).order_by('-publish_date')[:self.cnt_my_last_vacancies]
@@ -205,11 +205,6 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
     template_name = 'app/vacancy/response.html'
     success_url = reverse_lazy('Vacancies')
 
-    def get_initial(self):
-        init = super(ResponseCreateView,self).get_initial()
-        init['text'] = Applicant.objects.get(profile=self.request.user.profile).default_response()
-        return init
-
     def redirect_if_denied(self):
         redirect = super(ResponseCreateView, self).redirect_if_denied()
         if redirect:
@@ -222,8 +217,10 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
 
     def get_form_kwargs(self):
         new_kwargs = super(ResponseCreateView, self).get_form_kwargs()
-        new_kwargs['initial']['applicant'] = Applicant.objects.get(profile=self.request.user.profile)
+        applicant = Applicant.objects.get(profile=self.request.user.profile)
+        new_kwargs['initial']['applicant'] = applicant
         new_kwargs['initial']['vacancy'] = Vacancy.objects.get(pk=self.kwargs['pk'])
+        new_kwargs['initial']['text'] = applicant.default_response()
         return new_kwargs
 
 
@@ -328,62 +325,62 @@ def view_update_my_profile(request):
 
 # ##############################################
 
-class CvCreateView(DenyIfNotApplicantMixin, CreateView):
-    model = CV
+class ApplicationCreateView(DenyIfNotApplicantMixin, CreateView):
+    model = Application
     form_class = CvForm
     context_object_name = 'cv'
-    template_name = 'app/CV/form.html'
+    template_name = 'app/application/form.html'
     success_url = reverse_lazy('MyCVs')
 
     def get_form_kwargs(self):
-        new_kwargs = super(CvCreateView, self).get_form_kwargs()
+        new_kwargs = super(ApplicationCreateView, self).get_form_kwargs()
         new_kwargs['initial']['applicant'] = Applicant.objects.get(profile=self.request.user.profile)
         return new_kwargs
 
 
-class CvUpdateView(DenyIfApplicantNotOwnerMixin, UpdateView):
-    model = CV
+class ApplicationUpdateView(DenyIfApplicantNotOwnerMixin, UpdateView):
+    model = Application
     form_class = CvForm
     context_object_name = 'cv'
-    template_name = 'app/CV/form.html'
+    template_name = 'app/application/form.html'
     success_url = reverse_lazy('MyCVs')
 
 
-class CvListView(ListView):
-    model = CV
+class ApplicationListView(ListView):
+    model = Application
     context_object_name = 'cvs'
-    template_name = 'app/CV/list.html'
+    template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
 
     def get_context_data(self, **kwargs):
-        context = super(CvListView, self).get_context_data()
+        context = super(ApplicationListView, self).get_context_data()
         context['page_header'] = 'Все резюме'
         return context
 
 
-class MyCvListView(DenyIfNotApplicantMixin, ListView):
-    model = CV
+class MyApplicationListView(DenyIfNotApplicantMixin, ListView):
+    model = Application
     context_object_name = 'cvs'
-    template_name = 'app/CV/list.html'
+    template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
 
     def get_queryset(self):
-        return CV.objects.filter(applicant__profile=self.request.user.profile)
+        return Application.objects.filter(applicant__profile=self.request.user.profile)
 
     def get_context_data(self, **kwargs):
-        context = super(MyCvListView, self).get_context_data()
+        context = super(MyApplicationListView, self).get_context_data()
         context['page_header'] = 'Мои резюме'
         return context
 
 
-class CvDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
-    model = CV
+class ApplicationDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
+    model = Application
     context_object_name = 'cvs'
-    template_name = 'app/CV/delete.html'
+    template_name = 'app/application/delete.html'
     success_url = reverse_lazy('MyCVs')
 
 
-class CvDetailView(DetailView):
-    model = CV
+class ApplicationDetailView(DetailView):
+    model = Application
     context_object_name = 'cv'
-    template_name = 'app/CV/detail.html'
+    template_name = 'app/application/detail.html'
