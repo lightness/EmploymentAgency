@@ -22,15 +22,15 @@ def view_route_after_login(request):
 
 
 class AboutView(TemplateView):
-    template_name = "about.html"
+    template_name = "app/other/about.html"
 
 
 class AccessDeniedView(TemplateView):
-    template_name = "access_denied.html"
+    template_name = "app/other/access_denied.html"
 
 
 class HomeView(TemplateView):
-    template_name = "home.html"
+    template_name = "app/other/home.html"
 
 
 def view_choose_role(request):
@@ -119,7 +119,7 @@ class DenyIfApplicantNotOwnerMixin(DenyIfNotApplicantMixin):
 
 
 class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
-    template_name = "app/applicant_home.html"
+    template_name = "app/other/applicant_home.html"
     cnt_last_vacancies = 3
     cnt_my_last_responses = 3
     cnt_my_last_applications = 3
@@ -139,7 +139,7 @@ class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
 
 
 class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
-    template_name = "app/employer_home.html"
+    template_name = "app/other/employer_home.html"
     cnt_last_applications = 3
     cnt_last_responses_for_my_vacancies = 3
     cnt_my_last_vacancies = 3
@@ -224,10 +224,20 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
         return new_kwargs
 
 
-class ResponseDetailView(DenyIfApplicantNotOwnerMixin, DetailView):
+class ResponseDetailView(RedirectIfDenyMixin, DetailView):
     model = Response
     context_object_name = 'response'
     template_name = 'app/response/detail.html'
+
+    def redirect_if_denied(self):
+        profile = self.request.user.profile
+        response = self.get_object()
+        if profile.is_employer():
+            if response.vacancy.employer.profile != profile:
+                return HttpResponseRedirect(reverse('AccessDenied'))
+        elif profile.is_applicant():
+            if response.applicant.profile != profile:
+                return HttpResponseRedirect(reverse('AccessDenied'))
 
 
 def view_route_to_my_response(request, **kwargs):
@@ -242,9 +252,27 @@ class MyResponsesListView(DenyIfNotApplicantMixin, ListView):
     template_name = 'app/response/list.html'
     paginate_by = RECORDS_PER_PAGE
 
+    def get_queryset(self):
+        return Response.objects.filter(applicant__profile=self.request.user.profile)
+
     def get_context_data(self, **kwargs):
         context = super(MyResponsesListView, self).get_context_data()
-        context['page_header'] = 'Мои отклики на вакансии'
+        context['page_header'] = 'Мои отклики'
+        return context
+
+
+class ResponsesForMyVacanciesListView(DenyIfNotEmployerMixin, ListView):
+    model = Response
+    context_object_name = 'responses'
+    template_name = 'app/response/list.html'
+    paginate_by = RECORDS_PER_PAGE
+
+    def get_queryset(self):
+        return Response.objects.filter(vacancy__employer__profile=self.request.user.profile)
+
+    def get_context_data(self, **kwargs):
+        context = super(ResponsesForMyVacanciesListView, self).get_context_data()
+        context['page_header'] = 'Отклики на мои вакансии'
         return context
 
 
@@ -282,7 +310,7 @@ class VacancyDetailView(DetailView):
 class ProfileDetailView(DetailView):
     model = Profile
     context_object_name = 'profile'
-    template_name = 'app/profile_detail.html'
+    template_name = 'app/profile/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(ProfileDetailView, self).get_context_data()
@@ -293,8 +321,9 @@ class ProfileDetailView(DetailView):
             context['applicant'] = Applicant.objects.get(profile=profile)
         return context
 
+
 def view_update_my_profile(request):
-    template_name = 'app/profile.html'
+    template_name = 'app/profile/form.html'
 
     profile = request.user.profile
     profile_form = ProfileForm(request.POST or None, instance=profile)
@@ -380,7 +409,7 @@ class MyApplicationListView(DenyIfNotApplicantMixin, ListView):
 
 class ApplicationDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
     model = Application
-    context_object_name = 'applications'
+    context_object_name = 'application'
     template_name = 'app/application/delete.html'
     success_url = reverse_lazy('MyApplications')
 

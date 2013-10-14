@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>Ваш отклик на вакансию {{ response.vacancy.employer.title }} "{{ response.vacancy.profession }}"</h3>
+        <h3>Отклик на вакансию {{ response.vacancy.employer.title }} "{{ response.vacancy.profession }}"</h3>
     </div>
 
     <div>
@@ -11,8 +11,14 @@
     </div>
 
     <div class="text-center">
-        <a class="btn btn-default" href="{% url 'Vacancies' %}">Все вакансии</a>
-        <a class="btn btn-default" href="{% url 'MyResponses' %}">Мои отклики</a>
+        {% if user.profile.is_applicant %}
+            <a class="btn btn-default" href="{% url 'Vacancies' %}">Все вакансии</a>
+            <a class="btn btn-default" href="{% url 'MyResponses' %}">Мои отклики</a>
+        {% elif user.profile.is_employer %}
+            <a class="btn btn-default" href="{% url 'Vacancies' %}">Все вакансии</a>
+            <a class="btn btn-default" href="{% url 'MyVacancies' %}">Мои вакансии</a>
+            <a class="btn btn-default" href="{% url 'ResponsesForMyVacancies' %}">Отклики на мои вакансии</a>
+        {% endif %}
     </div>
 
 {% endblock %}

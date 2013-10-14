@@ -1,7 +1,13 @@
-<div class="">
-    <h2 style="margin-top:0"><a href="{% url 'MyVacancies' %}">Отклики на мои вакансии</a></h2>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <strong>
+                <a href="{% url 'ResponsesForMyVacancies' %}">Отклики на мои вакансии</a>
+            </strong>
+        </div>
+    </div>
 
-    <div>
+    <div class="panel-body">
         {% for r in last_responses_for_my_vacancies %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowResponse' r.id %}">

@@ -1,0 +1,16 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <table class="td-to-top">
+        <tr class="row">
+            <td class="col-md-6 alert">{% include 'partition_template/applicant_home/vacancies.html' %}</td>
+            <td class="col-md-6 alert">{% include 'partition_template/applicant_home/my_applications.html' %}</td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-6 alert">{% include 'partition_template/profile.html' %}</td>
+            <td class="col-md-6 alert">{% include 'partition_template/applicant_home/my_responses.html' %}</td>
+        </tr>
+    </table>
+
+{% endblock %}

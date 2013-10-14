@@ -5,9 +5,9 @@
     <div class="page-header text-center">
         <h3>
             {% if form.instance.pk %}
-                Редактрирование резюме "{{ form.instance.profession }}"
+                Редактрирование заявление "{{ form.instance.profession }}"
             {% else %}
-                Создание резюме
+                Создание заявление
             {% endif %}
         </h3>
     </div>
@@ -29,7 +29,6 @@
             {% endif %}
 
             <form action="." method="post">{% csrf_token %}
-                {#            {{ form.as_p }}#}
                 {{ form.applicant }}
 
                 <div class="form-group">
@@ -74,10 +73,11 @@
                         {% if form.instance.pk %}
                             Сохранить изменения
                         {% else %}
-                            Опубликовать резюме
+                            Опубликовать заявление
                         {% endif %}
                     </button>
-                    <a class="btn btn-default" href="{% url 'Vacancies' %}">К списку резюме</a>
+                    <a class="btn btn-default" href="{% url 'Applications' %}">Все заявления</a>
+                    <a class="btn btn-default" href="{% url 'MyApplications' %}">Мои заявления</a>
                 </div>
             </form>
         </div>

@@ -1,7 +1,13 @@
-<div class="">
-    <h2 style="margin-top:0"><a href="{% url 'Applications' %}">Резюме</a></h2>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <strong>
+                <a href="{% url 'Applications' %}">Заявления</a>
+            </strong>
+        </div>
+    </div>
 
-    <div>
+    <div class="panel-body">
         {% for a in last_applications %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowApplication' a.id %}">

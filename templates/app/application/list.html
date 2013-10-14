@@ -6,12 +6,12 @@
         <h3>{{ page_header }}</h3>
         {% if user.profile.is_applicant %}
             <div>
-                <a class="btn btn-success" href="{% url 'CreateCV' %}">Создать заявление</a>
+                <a class="btn btn-success" href="{% url 'CreateApplication' %}">Создать заявление</a>
             </div>
         {% endif %}
     </div>
 
-    {% if cvs %}
+    {% if applications %}
         <table class="table table-bordered table-stripped">
             <thead>
             <tr>
@@ -24,23 +24,24 @@
             </tr>
             </thead>
             <tbody>
-            {% for cv in cvs %}
+            {% for a in applications %}
                 <tr>
-                    <td><a href="{% url 'ShowProfile' cv.applicant.profile.id %}">{{ cv.applicant.full_name }}</a></td>
-                    <td>{{ cv.profession }}</td>
+                    <td><a href="{% url 'ShowProfile' a.applicant.profile.id %}">{{ a.applicant.full_name }}</a></td>
+                    <td>{{ a.profession }}</td>
                     <td>
-                        {% if cv.applicant.birth_date %}
-                            {{ cv.applicant.age }} лет
+                        {% if a.applicant.birth_date %}
+                            {{ a.applicant.age }} лет
+                        {% else %}-
                         {% endif %}
                     </td>
-                    <td>{{ cv.experience|default:"-" }}</td>
-                    <td>{{ cv.publish_date|date:"d.m.Y H:i:s" }}</td>
+                    <td>{{ a.experience|default:"-" }}</td>
+                    <td>{{ a.publish_date|date:"d.m.Y H:i:s" }}</td>
                     <td>
-                        <a class="btn btn-success btn-xs" href="{% url 'ShowCV' cv.id %}">Просмотр</a>
+                        <a class="btn btn-success btn-xs" href="{% url 'ShowApplication' a.id %}">Просмотр</a>
                         {% if user.profile.is_applicant %}
-                            {% ifequal cv.applicant.profile user.profile %}
-                                <a class="btn btn-xs btn-warning" href="{% url 'UpdateCV' cv.id %}">Редактировать</a>
-                                <a class="btn btn-xs btn-danger" href="{% url 'DeleteCV' cv.id %}">Удалить</a>
+                            {% ifequal a.applicant.profile user.profile %}
+                                <a class="btn btn-xs btn-warning" href="{% url 'UpdateApplication' a.id %}">Редактировать</a>
+                                <a class="btn btn-xs btn-danger" href="{% url 'DeleteApplication' a.id %}">Удалить</a>
                             {% endifequal %}
                         {% endif %}
                     </td>

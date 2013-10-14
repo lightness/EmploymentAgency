@@ -3,13 +3,13 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>Удаление резюме</h3>
+        <h3>Удаление заявления</h3>
     </div>
 
-    <h4>Вы действительно хотите удалить резюме <b>{{ cv.profession }}</b>?</h4>
+    <h4>Вы действительно хотите удалить заявление о поиске работы по професии <b>{{ application.profession }}</b>?</h4>
     <form action="" method="post">{% csrf_token %}
         <button class="btn btn-danger">Да</button>
-        <a href="{% url 'MyCVs' %}" class="btn btn-default">Нет</a>
+        <a href="{% url 'MyApplications' %}" class="btn btn-default">Нет</a>
     </form>
 
 {% endblock %}

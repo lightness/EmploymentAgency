@@ -1,7 +1,11 @@
-<div class="">
-    <h2 style="margin-top:0"><a href="{% url 'MyResponses' %}">Мои отклики</a></h2>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <strong><a href="{% url 'MyResponses' %}">Мои отклики</a></strong>
+        </div>
+    </div>
 
-    <div>
+    <div class="panel-body">
         {% for r in my_last_responses %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowResponse' r.id %}">
