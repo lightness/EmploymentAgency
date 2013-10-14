@@ -1,0 +1,29 @@
+<div class="">
+    <h2 style="margin-top:0"><a href="{% url 'MyVacancies' %}">Отклики на мои вакансии</a></h2>
+
+    <div>
+        {% for r in last_responses_for_my_vacancies %}
+            <div class="media">
+                <a class="pull-left" href="{% url 'ShowResponse' r.id %}">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                </a>
+
+                <div class="pull-right text-center">
+                    <div>
+                        <small>{{ r.response_date|date:"H:i:s" }}</small>
+                    </div>
+                    <div>
+                        <small>{{ r.response_date|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{ r.vacancy.profession }}
+                        <small>{{ r.vacancy.employer.title }}</small>
+                    </h4>
+                    {{ r.text }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

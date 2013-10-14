@@ -1,0 +1,29 @@
+<div class="">
+    <h2 style="margin-top:0"><a href="{% url 'Vacancies' %}">Вакансии</a></h2>
+
+    <div>
+        {% for v in last_vacancies %}
+            <div class="media">
+                <a class="pull-left" href="{% url 'ShowVacancy' v.id %}">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                </a>
+
+                <div class="pull-right text-center">
+                    <div>
+                        <small>{{ v.publish_date|date:"H:i:s" }}</small>
+                    </div>
+                    <div>
+                        <small>{{ v.publish_date|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{ v.profession }}
+                        <small>{{ v.employer.title }}</small>
+                    </h4>
+                    {{ v }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

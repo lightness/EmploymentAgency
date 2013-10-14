@@ -1,0 +1,72 @@
+<div class="">
+    <h2 style="margin-top:0">
+        <a href="{% url 'ShowProfile' user.profile.id %}">Мой профиль</a>
+        <a href="{% url 'UpdateProfile' %}" class="pull-right">
+            <small class="btn-link">Изменить</small>
+        </a>
+    </h2>
+
+    <table class="table">
+        <tbody>
+            {% if applicant %}
+            <tr>
+                <th>ФИО</th>
+                <td>
+                    {% if applicant.full_name %}<i class="glyphicon glyphicon-user"></i>{% endif %}
+                    {{ applicant.full_name|default:"Не указано" }}
+                </td>
+            </tr>
+            <tr>
+                <th>Дата рождения</th>
+                <td>
+                    {% if applicant.birth_date %}<i class="glyphicon glyphicon-calendar"></i>{% endif %}
+                    {{ applicant.birth_date|default:"Не указано" }}
+                </td>
+            </tr>
+            {% elif employer %}
+            <tr>
+                <th>Наименование организации</th>
+                <td>
+                    {% if employer.title %}<i class="glyphicon glyphicon-briefcase"></i>{% endif %}
+                    {{ employer.title|default:"Не указано" }}
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Контактный телефон №1</th>
+                <td>
+                    {% if user.profile.phone1 %}<i class="glyphicon glyphicon-earphone"></i>{% endif %}
+                    {{ user.profile.phone1|default:"Не указано" }}
+                </td>
+            </tr>
+            <tr>
+                <th>Контактный телефон №2</th>
+                <td>
+                    {% if user.profile.phone2 %}<i class="glyphicon glyphicon-earphone"></i>{% endif %}
+                    {{ user.profile.phone2|default:"Не указано" }}
+                </td>
+            </tr>
+            <tr>
+                <th>Контактный Email</th>
+                <td>
+                    {% if user.profile.email %}<i class="glyphicon glyphicon-envelope"></i>{% endif %}
+                    {{ user.profile.email|default:"Не указано" }}
+                </td>
+            </tr>
+            <tr>
+                <th>Контактный Skype</th>
+                <td>
+                    {% if user.profile.skype %}<i class="glyphicon glyphicon-paperclip"></i>{% endif %}
+                    {{ user.profile.skype|default:"Не указано" }}
+                </td>
+            </tr>
+            <tr>
+                <th>Контактный ICQ</th>
+                <td>
+                    {% if user.profile.icq %}<i class="glyphicon glyphicon-paperclip"></i>{% endif %}
+                    {{ user.profile.icq|default:"Не указано" }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,31 @@
+<div class="">
+    <h2 style="margin-top:0"><a href="{% url 'MyCVs' %}">Мои резюме</a></h2>
+
+    <div>
+        {% for cv in my_last_CVs %}
+            <div class="media">
+                <a class="pull-left" href="{% url 'UpdateCV' cv.id %}">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                </a>
+
+                <div class="pull-right text-center">
+                    <div>
+                        <small>{{ cv.publish_date|date:"H:i:s" }}</small>
+                    </div>
+                    <div>
+                        <small>{{ cv.publish_date|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{ cv.profession }}
+                        {% if cv.experience %}
+                            <small>(стаж {{ cv.experience }}лет)</small>
+                        {% endif %}
+                    </h4>
+                    {{ cv }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
