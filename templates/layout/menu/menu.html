@@ -64,27 +64,27 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-tasks"></i>
-                        Резюме
+                        Поиск работы
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="{% url 'CVs' %}">
+                            <a href="{% url 'Applications' %}">
                                 <i class="glyphicon glyphicon-list"></i>
-                                Все резюме
+                                Все заявления
                             </a>
                         </li>
                         {% if user.profile.is_applicant %}
                             <li>
-                                <a href="{% url 'MyCVs' %}">
+                                <a href="{% url 'MyApplications' %}">
                                     <i class="glyphicon glyphicon-home"></i>
-                                    Мои резюме
+                                    Мои заявления
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'CreateCV' %}">
+                                <a href="{% url 'CreateApplication' %}">
                                     <i class="glyphicon glyphicon-tags"></i>
-                                    Создать резюме
+                                    Создать заявление
                                 </a>
                             </li>
                         {% endif %}

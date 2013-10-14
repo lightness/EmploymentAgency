@@ -38,7 +38,7 @@
                             до {{ vacancy.salary_max }} {{ vacancy.salary_currency }}
                         {% endif %}
                     </td>
-                    <td>{{ vacancy.publish_date }}</td>
+                    <td>{{ vacancy.publish_date|date:"d.m.Y H:i:s" }}</td>
                     <td>{{ vacancy.response_set.count }}</td>
                     <td>
                         <a class="btn btn-xs btn-success" href="{% url 'ShowVacancy' vacancy.id %}">Просмотр</a>

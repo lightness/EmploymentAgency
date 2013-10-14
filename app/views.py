@@ -122,36 +122,36 @@ class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
     template_name = "app/applicant_home.html"
     cnt_last_vacancies = 3
     cnt_my_last_responses = 3
-    cnt_my_last_CVs = 3
+    cnt_my_last_applications = 3
 
     def get_context_data(self, **kwargs):
         last_vacancies = Vacancy.objects.order_by('-publish_date')[:self.cnt_last_vacancies]
         applicant = Applicant.objects.get(profile=self.request.user.profile)
         my_last_responses = Response.objects.filter(applicant=applicant).order_by('-response_date')[:self.cnt_my_last_responses]
-        my_last_CVs = Application.objects.filter(applicant=applicant).order_by('-publish_date')[:self.cnt_my_last_CVs]
+        my_last_applications = Application.objects.filter(applicant=applicant).order_by('-publish_date')[:self.cnt_my_last_applications]
 
         context = super(ApplicantHomeView, self).get_context_data()
         context['last_vacancies'] = last_vacancies
         context['my_last_responses'] = my_last_responses
-        context['my_last_CVs'] = my_last_CVs
+        context['my_last_applications'] = my_last_applications
         context['applicant'] = applicant
         return context
 
 
 class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
     template_name = "app/employer_home.html"
-    cnt_last_CVs = 3
+    cnt_last_applications = 3
     cnt_last_responses_for_my_vacancies = 3
     cnt_my_last_vacancies = 3
 
     def get_context_data(self, **kwargs):
-        last_CVs = Application.objects.order_by('-publish_date')[:self.cnt_last_CVs]
+        last_applications = Application.objects.order_by('-publish_date')[:self.cnt_last_applications]
         employer = Employer.objects.get(profile=self.request.user.profile)
         last_responses_for_my_vacancies = Response.objects.filter(vacancy__employer=employer).order_by('-response_date')[:self.cnt_last_responses_for_my_vacancies]
         my_last_vacancies = Vacancy.objects.filter(employer=employer).order_by('-publish_date')[:self.cnt_my_last_vacancies]
 
         context = super(EmployerHomeView, self).get_context_data()
-        context['last_CVs'] = last_CVs
+        context['last_applications'] = last_applications
         context['last_responses_for_my_vacancies'] = last_responses_for_my_vacancies
         context['my_last_vacancies'] = my_last_vacancies
         context['employer'] = employer
@@ -202,7 +202,7 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
     model = Response
     form_class = ResponseForm
     context_object_name = 'response'
-    template_name = 'app/vacancy/response.html'
+    template_name = 'app/response/form.html'
     success_url = reverse_lazy('Vacancies')
 
     def redirect_if_denied(self):
@@ -227,7 +227,7 @@ class ResponseCreateView(DenyIfNotApplicantMixin, CreateView):
 class ResponseDetailView(DenyIfApplicantNotOwnerMixin, DetailView):
     model = Response
     context_object_name = 'response'
-    template_name = 'app/vacancy/detail_response.html'
+    template_name = 'app/response/detail.html'
 
 
 def view_route_to_my_response(request, **kwargs):
@@ -239,8 +239,13 @@ def view_route_to_my_response(request, **kwargs):
 class MyResponsesListView(DenyIfNotApplicantMixin, ListView):
     model = Response
     context_object_name = 'responses'
-    template_name = 'app/vacancy/my_responses.html'
+    template_name = 'app/response/list.html'
     paginate_by = RECORDS_PER_PAGE
+
+    def get_context_data(self, **kwargs):
+        context = super(MyResponsesListView, self).get_context_data()
+        context['page_header'] = 'Мои отклики на вакансии'
+        return context
 
 
 class MyVacanciesListView(DenyIfNotEmployerMixin, ListView):
@@ -315,7 +320,7 @@ def view_update_my_profile(request):
             valid = False
 
         if valid:
-            return HttpResponseRedirect(reverse('UpdateProfile'))
+            return HttpResponseRedirect(reverse('ShowProfile', args=(profile.id,)))
 
     context = {
         'profile': profile_form,
@@ -327,10 +332,10 @@ def view_update_my_profile(request):
 
 class ApplicationCreateView(DenyIfNotApplicantMixin, CreateView):
     model = Application
-    form_class = CvForm
-    context_object_name = 'cv'
+    form_class = ApplicationForm
+    context_object_name = 'application'
     template_name = 'app/application/form.html'
-    success_url = reverse_lazy('MyCVs')
+    success_url = reverse_lazy('MyApplications')
 
     def get_form_kwargs(self):
         new_kwargs = super(ApplicationCreateView, self).get_form_kwargs()
@@ -340,27 +345,27 @@ class ApplicationCreateView(DenyIfNotApplicantMixin, CreateView):
 
 class ApplicationUpdateView(DenyIfApplicantNotOwnerMixin, UpdateView):
     model = Application
-    form_class = CvForm
-    context_object_name = 'cv'
+    form_class = ApplicationForm
+    context_object_name = 'application'
     template_name = 'app/application/form.html'
-    success_url = reverse_lazy('MyCVs')
+    success_url = reverse_lazy('MyApplications')
 
 
 class ApplicationListView(ListView):
     model = Application
-    context_object_name = 'cvs'
+    context_object_name = 'applications'
     template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
 
     def get_context_data(self, **kwargs):
         context = super(ApplicationListView, self).get_context_data()
-        context['page_header'] = 'Все резюме'
+        context['page_header'] = 'Все заявления'
         return context
 
 
 class MyApplicationListView(DenyIfNotApplicantMixin, ListView):
     model = Application
-    context_object_name = 'cvs'
+    context_object_name = 'applications'
     template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
 
@@ -369,18 +374,18 @@ class MyApplicationListView(DenyIfNotApplicantMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MyApplicationListView, self).get_context_data()
-        context['page_header'] = 'Мои резюме'
+        context['page_header'] = 'Мои заявления'
         return context
 
 
 class ApplicationDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
     model = Application
-    context_object_name = 'cvs'
+    context_object_name = 'applications'
     template_name = 'app/application/delete.html'
-    success_url = reverse_lazy('MyCVs')
+    success_url = reverse_lazy('MyApplications')
 
 
 class ApplicationDetailView(DetailView):
     model = Application
-    context_object_name = 'cv'
+    context_object_name = 'application'
     template_name = 'app/application/detail.html'

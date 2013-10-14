@@ -1,29 +1,29 @@
 <div class="">
-    <h2 style="margin-top:0"><a href="{% url 'MyCVs' %}">Мои резюме</a></h2>
+    <h2 style="margin-top:0"><a href="{% url 'MyApplications' %}">Мои резюме</a></h2>
 
     <div>
-        {% for cv in my_last_CVs %}
+        {% for a in my_last_applications %}
             <div class="media">
-                <a class="pull-left" href="{% url 'UpdateCV' cv.id %}">
+                <a class="pull-left" href="{% url 'UpdateApplication' a.id %}">
                     <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
                 </a>
 
                 <div class="pull-right text-center">
                     <div>
-                        <small>{{ cv.publish_date|date:"H:i:s" }}</small>
+                        <small>{{ a.publish_date|date:"H:i:s" }}</small>
                     </div>
                     <div>
-                        <small>{{ cv.publish_date|date:"d.m.Y" }}</small>
+                        <small>{{ a.publish_date|date:"d.m.Y" }}</small>
                     </div>
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading">{{ cv.profession }}
-                        {% if cv.experience %}
-                            <small>(стаж {{ cv.experience }}лет)</small>
+                    <h4 class="media-heading">{{ a.profession }}
+                        {% if a.experience %}
+                            <small>(стаж {{ a.experience }}лет)</small>
                         {% endif %}
                     </h4>
-                    {{ cv }}
+                    {{ a }}
                 </div>
             </div>
         {% endfor %}

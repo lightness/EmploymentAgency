@@ -66,11 +66,11 @@ urlpatterns = patterns('',
     url(r"^vacancies/my/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
 
 
-    # http://имя_сайта/app/CVs/
-    url(r"^CVs/$", views.ApplicationListView.as_view(), name='Applications'),
+    # http://имя_сайта/app/applications/
+    url(r"^applications/$", views.ApplicationListView.as_view(), name='Applications'),
 
-    # http://имя_сайта/app/CVs/my/
-    url(r"^CVs/my/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
+    # http://имя_сайта/app/applications/my/
+    url(r"^applications/my/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
 
     # http://имя_сайта/app/application/create/
     url(r"^application/create/$", login_required(views.ApplicationCreateView.as_view()), name='CreateApplication'),

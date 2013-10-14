@@ -78,7 +78,7 @@ class EmployerForm(forms.ModelForm):
         }
 
 
-class CvForm(forms.ModelForm):
+class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
         exclude = ('publish_date',)

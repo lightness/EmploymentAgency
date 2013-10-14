@@ -6,7 +6,7 @@
         <h3>{{ page_header }}</h3>
         {% if user.profile.is_applicant %}
             <div>
-                <a class="btn btn-success" href="{% url 'CreateCV' %}">Создать резюме</a>
+                <a class="btn btn-success" href="{% url 'CreateCV' %}">Создать заявление</a>
             </div>
         {% endif %}
     </div>
@@ -66,7 +66,7 @@
             </ul>
         {% endif %}
     {% else %}
-        <h5>Вакансий нет</h5>
+        <h5>Заявлений нет</h5>
     {% endif %}
 
 

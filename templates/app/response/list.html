@@ -3,13 +3,14 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>Мои отклики на вакансии</h3>
+        <h3>{{ page_header }}</h3>
     </div>
 
     {% if responses %}
         <table class="table table-bordered table-stripped">
             <thead>
             <tr>
+                <th>Соискатель</th>
                 <th>Вакансия</th>
                 <th>Организация</th>
                 <th>Дата создания вакансии</th>
@@ -20,6 +21,7 @@
             <tbody>
             {% for response in responses %}
                 <tr>
+                    <td>{{ response.applicant.full_name }}</td>
                     <td>{{ response.vacancy.profession }}</td>
                     <td>
                         <a href="{% url 'ShowProfile' response.vacancy.employer.profile.id %}">
