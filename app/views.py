@@ -25,6 +25,10 @@ class AboutView(TemplateView):
     template_name = "app/other/about.html"
 
 
+class RegisterSuccessView(TemplateView):
+    template_name = "registration/registered.html"
+
+
 class AccessDeniedView(TemplateView):
     template_name = "app/other/access_denied.html"
 
@@ -34,7 +38,7 @@ class HomeView(TemplateView):
 
 
 def view_choose_role(request):
-    template_name = "choose_role.html"
+    template_name = "app/other/choose_role.html"
 
     if request.method == "POST":
         role = request.POST["role"]
@@ -58,7 +62,7 @@ def view_register(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('Login'))
+            return HttpResponseRedirect(reverse('Registered'))
 
     context = {
         'form': form

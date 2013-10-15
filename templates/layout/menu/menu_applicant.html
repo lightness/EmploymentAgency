@@ -1,0 +1,86 @@
+<ul class="nav navbar-nav">
+    <li>
+        <a href="{% url 'ApplicantHome' %}">
+            <i class="glyphicon glyphicon-home"></i>
+            Домой
+        </a>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-tasks"></i>
+            Вакансии
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'Vacancies' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Все вакансии
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'MyResponses' %}">
+                    <i class="glyphicon glyphicon-tags"></i>
+                    Мои отклики
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-tasks"></i>
+            Поиск работы
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'CreateApplication' %}">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    Создать заявление
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="{% url 'Applications' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Все заявления
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'MyApplications' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Мои заявления
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Помощь
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'About' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    О программе
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="{% url 'Logout' %}">Выйти</a>
+    </li>
+</ul>
+<div class="navbar-right">
+    <div class="navbar-text">Добро пожаловать, <strong>{{ user.username }}</strong>.</div>
+</div>

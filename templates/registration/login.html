@@ -2,8 +2,11 @@
 
 {% block content %}
 
+    <div class="page-header text-center">
+        <h3>Вход в систему</h3>
+    </div>
+
     <form id="form-login" action='.' method='post'>{% csrf_token %}
-        <h2 class="text-center">Вход в систему</h2>
 
         <div class="form-group">
             <!-- Username -->
@@ -13,7 +16,7 @@
 
         <div class="form-group">
             <!-- Password-->
-            <label for="password1">Пароль</label>
+            <label for="password">Пароль</label>
             <input type="password" id="password" name="password" class="form-control">
         </div>
 

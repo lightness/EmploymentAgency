@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url='/accounts/login/')),
     url(r'^agency/', include('app.urls')),
 
+
+    url(r"^accounts/register/success/$", views.RegisterSuccessView.as_view(), name='Registered'),
     url(r'^accounts/register/$', views.view_register, name='Register'),
     url(r'^accounts/login/$',  login, name='Login'),
     url(r'^accounts/logout/$', logout, { 'next_page': '/agency/home/' }, name='Logout'),

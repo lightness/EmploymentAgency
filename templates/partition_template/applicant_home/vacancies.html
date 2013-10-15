@@ -11,7 +11,7 @@
         {% for v in last_vacancies %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowVacancy' v.id %}">
-                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/vacancy.png" alt="...">
                 </a>
 
                 <div class="pull-right text-center">
@@ -24,12 +24,17 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading">{{ v.profession }}
+                    <h4 class="media-heading">
+                        <a href="{% url 'ShowVacancy' v.id %}">
+                            {{ v.profession }}
+                        </a>
                         <small>{{ v.employer.title }}</small>
                     </h4>
                     {{ v }}
                 </div>
             </div>
+        {% empty %}
+            Вакансий нет
         {% endfor %}
     </div>
 </div>

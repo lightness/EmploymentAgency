@@ -9,7 +9,7 @@
         {% for a in my_last_applications %}
             <div class="media">
                 <a class="pull-left" href="{% url 'UpdateApplication' a.id %}">
-                    <img class="media-object" src="{{ STATIC_URL }}own/img/ball.jpg" alt="...">
+                    <img class="media-object" src="{{ STATIC_URL }}own/img/application.png" alt="...">
                 </a>
 
                 <div class="pull-right text-center">
@@ -22,7 +22,10 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading">{{ a.profession }}
+                    <h4 class="media-heading">
+                        <a href="{% url 'UpdateApplication' a.id %}">
+                            {{ a.profession }}
+                        </a>
                         {% if a.experience %}
                             <small>(стаж {{ a.experience }}лет)</small>
                         {% endif %}
@@ -30,6 +33,8 @@
                     {{ a }}
                 </div>
             </div>
+        {% empty %}
+            Заявлений нет. <a href="{% url 'CreateApplication' %}">Создать заявление</a>?
         {% endfor %}
     </div>
 </div>

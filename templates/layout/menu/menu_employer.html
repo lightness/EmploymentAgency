@@ -1,0 +1,77 @@
+<ul class="nav navbar-nav">
+    <li>
+        <a href="{% url 'EmployerHome' %}">
+            <i class="glyphicon glyphicon-home"></i>
+            Домой
+        </a>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-tasks"></i>
+            Вакансии
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'CreateVacancy' %}">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    Создать вакансию
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'Vacancies' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Все вакансии
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'MyVacancies' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Мои вакансии
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-tasks"></i>
+            Поиск работы
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'Applications' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    Все заявления
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Помощь
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'About' %}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    О программе
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="{% url 'Logout' %}">Выйти</a>
+    </li>
+</ul>
+<div class="navbar-right">
+    <div class="navbar-text">Добро пожаловать, <strong>{{ user.username }}</strong>.</div>
+</div>

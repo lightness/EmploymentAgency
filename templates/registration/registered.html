@@ -1,0 +1,16 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h3>
+            Регистрация пройдена
+        </h3>
+    </div>
+
+    <div>Поздравляем Вас с успешной регистрацией! Теперь Вы можете войти на сайт.</div>
+
+    <div class="text-center" style="margin-top: 10px">
+        <a href="{% url 'Login' %}" class="btn btn-primary">Войти на сайт</a>
+    </div>
+{% endblock %}
