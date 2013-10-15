@@ -3,7 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from datetime import date
-import math
+
+
+def content_file_name(instance, filename):
+    return '/'.join(['content', instance.user.username, filename])
 
 
 CURRENCY = (
@@ -79,6 +82,7 @@ class Applicant(models.Model):
 class Employer(models.Model):
     profile = models.ForeignKey(Profile)
     title = models.CharField(max_length=100, verbose_name="Наименование организации")
+    logo = models.ImageField(upload_to=content_file_name, verbose_name="Лого")
 
     def __unicode__(self):
         return self.profile.user.username

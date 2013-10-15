@@ -74,7 +74,8 @@ class EmployerForm(forms.ModelForm):
         exclude = ()
         widgets = {
             'profile': forms.HiddenInput(),
-            'title': BootstrapTextInput()
+            'title': BootstrapTextInput(),
+            'logo': forms.ClearableFileInput()
         }
 
 
