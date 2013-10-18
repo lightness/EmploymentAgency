@@ -312,7 +312,7 @@ def view_update_my_profile(request):
 
 # ##############################################
 
-class ApplicationCreateView(DenyIfNotApplicantMixin, CreateView):
+class ApplicationCreateView(CreateApplicationPageAlertMixin, DenyIfNotApplicantMixin,CreateView):
     model = Application
     form_class = ApplicationForm
     context_object_name = 'application'

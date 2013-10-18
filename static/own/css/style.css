@@ -21,8 +21,8 @@ table.td-to-top > tbody > tr > td{
 
 .my-alert {
     display: inline-block;
-    min-width: 200px;
-    max-width: 400px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 /* -------------- login.html --------------- */

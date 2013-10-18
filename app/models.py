@@ -39,7 +39,7 @@ class Applicant(models.Model):
     profile = models.ForeignKey(Profile)
     full_name = models.CharField(max_length=100, verbose_name="Фамилия Имя Отчество")
     birth_date = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
-    photo = models.ImageField(upload_to=content_file_name, verbose_name="Фото")
+    photo = models.ImageField(null=True, blank=True, upload_to=content_file_name, verbose_name="Фото")
 
     def age(self):
         if self.birth_date is None:

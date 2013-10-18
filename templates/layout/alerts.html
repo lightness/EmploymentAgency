@@ -1,6 +1,6 @@
 <div style="position: fixed; bottom: 0; left: 30px;">
 {% for alert in alerts %}
-    <div class="row text-right">
+    <div class="row">
         <div class="alert {{ alert.alert_class }} alert-dismissable text-left my-alert" >
             <button type="button" class="close" data-dismiss="alert" >&times;</button>
             {{ alert.text }}
