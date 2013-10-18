@@ -6,7 +6,7 @@
         <h3>Мой профиль</h3>
     </div>
 
-    <form action="." method="post" enctype="multipart/form-data" >{% csrf_token %}
+    <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="row">
             <div class="col-md-6">
                 <h4 class="text-center">Контактная информация</h4>
@@ -44,7 +44,83 @@
                     </div>
                 {% endif %}
 
-                {{ about_me.as_p }}
+                {{ about_me.profile }}
+                {% if user.profile.is_applicant %}
+
+                    <div class="form-group">
+                        <!-- full_name -->
+                        <label for="title">{{ about_me.full_name.label }}:</label>
+                        {{ about_me.full_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <!-- birth_date -->
+                        <label for="title">{{ about_me.birth_date.label }}:</label>
+                        {{ about_me.birth_date }}
+                    </div>
+
+                    <div class="form-group">
+                        <!-- birth_date -->
+                        <label for="title">{{ about_me.photo.label }}:</label>
+
+                        <div class="fileupload fileupload-new" data-provides="fileupload" data-uploadtype="image"
+                             data-name="photo">
+                            <div class="fileupload-new thumbnail" style="width: 200px; height: 200px;">
+                                {% if about_me.photo %}
+                                    <img src="{{ about_me.photo.value }}" height="200" width="200" />
+                                {% else %}
+                                    <img src="http://www.placehold.it/200x200/EFEFEF/AAAAAA"/>
+                                {% endif %}
+                            </div>
+                            <div class="fileupload-preview fileupload-exists thumbnail"
+                                 style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+                            <div>
+                                <span class="btn btn-file btn-success">
+                                    <span class="fileupload-new">Загрузить</span>
+                                    <span class="fileupload-exists">Сменить</span>
+                                    <input type="file"/>
+                                </span>
+                                <a href="#" class="btn btn-danger fileupload-exists"
+                                   data-dismiss="fileupload">Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% elif user.profile.is_employer %}
+
+                    <div class="form-group">
+                        <!-- title -->
+                        <label for="title">{{ about_me.title.label }}:</label>
+                        {{ about_me.title }}
+                    </div>
+
+                    <div class="form-group">
+                        <!-- logo -->
+                        <label for="title">{{ about_me.logo.label }}:</label>
+
+                        <div class="fileupload fileupload-new" data-provides="fileupload" data-uploadtype="image"
+                             data-name="logo">
+                            <div class="fileupload-new thumbnail" style="width: 200px; height: 200px;">
+                                {% if about_me.logo %}
+                                    <img src="{{ about_me.logo.value }}" height="200" width="200" />
+                                {% else %}
+                                    <img src="http://www.placehold.it/200x200/EFEFEF/AAAAAA"/>
+                                {% endif %}
+                            </div>
+                            <div class="fileupload-preview fileupload-exists thumbnail"
+                                 style="max-width: 200px; max-height: 200px; line-height: 20px;"></div>
+                            <div>
+                                <span class="btn btn-file btn-success">
+                                    <span class="fileupload-new">Загрузить</span>
+                                    <span class="fileupload-exists">Сменить</span>
+                                    <input type="file"/>
+                                </span>
+                                <a href="#" class="btn btn-danger fileupload-exists"
+                                   data-dismiss="fileupload">Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

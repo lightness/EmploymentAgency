@@ -1,0 +1,15 @@
+<div style="position: fixed; bottom: 0; left: 30px;">
+{% for alert in alerts %}
+    <div class="row text-right">
+        <div class="alert {{ alert.alert_class }} alert-dismissable text-left my-alert" >
+            <button type="button" class="close" data-dismiss="alert" >&times;</button>
+            {{ alert.text }}
+            {% if alert.button_text %}
+                <div style="padding-top: 5px;" class="text-center">
+                    <a href="{{ alert.button_redirect_url }}" class="btn btn-sm {{ alert.button_class }}">{{ alert.button_text }}</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+</div>

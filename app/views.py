@@ -8,6 +8,7 @@ from django.template import RequestContext
 from app.models import *
 from app.forms import *
 from app.forms import UserWithEmailCreationForm
+from app.view_mixins import *
 
 RECORDS_PER_PAGE = 5
 
@@ -21,7 +22,7 @@ def view_route_after_login(request):
     return HttpResponseRedirect(reverse('ChooseRole'))
 
 
-class AboutView(TemplateView):
+class AboutView(AlertMixin, TemplateView):
     template_name = "app/other/about.html"
 
 
@@ -70,59 +71,7 @@ def view_register(request):
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 
-class RedirectIfDenyMixin(object):
-    def get(self, request, *args, **kwargs):
-        redirect = self.redirect_if_denied()
-        if redirect:
-            return redirect
-        else:
-            return super(RedirectIfDenyMixin, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        redirect = self.redirect_if_denied()
-        if redirect:
-            return redirect
-        else:
-            return super(RedirectIfDenyMixin, self).post(request, *args, **kwargs)
-
-
-class DenyIfNotEmployerMixin(RedirectIfDenyMixin):
-    def redirect_if_denied(self):
-        profile = self.request.user.profile
-        if not profile.is_employer():
-            return HttpResponseRedirect(reverse('AccessDenied'))
-
-
-class DenyIfNotApplicantMixin(RedirectIfDenyMixin):
-    def redirect_if_denied(self):
-        profile = self.request.user.profile
-        if not profile.is_applicant():
-            return HttpResponseRedirect(reverse('AccessDenied'))
-
-
-class DenyIfEmployerNotOwnerMixin(DenyIfNotEmployerMixin):
-    def redirect_if_denied(self):
-        redirect = super(DenyIfEmployerNotOwnerMixin, self).redirect_if_denied()
-        if redirect:
-            return redirect
-        else:
-            obj = super(DenyIfEmployerNotOwnerMixin, self).get_object()
-            if self.request.user.profile.id != obj.employer.profile.id:
-                return HttpResponseRedirect(reverse('AccessDenied'))
-
-
-class DenyIfApplicantNotOwnerMixin(DenyIfNotApplicantMixin):
-    def redirect_if_denied(self):
-        redirect = super(DenyIfApplicantNotOwnerMixin, self).redirect_if_denied()
-        if redirect:
-            return redirect
-        else:
-            obj = super(DenyIfApplicantNotOwnerMixin, self).get_object()
-            if self.request.user.profile.id != obj.applicant.profile.id:
-                return HttpResponseRedirect(reverse('AccessDenied'))
-
-
-class ApplicantHomeView(DenyIfNotApplicantMixin, TemplateView):
+class ApplicantHomeView(ApplicantHomePageAlertMixin, DenyIfNotApplicantMixin, TemplateView):
     template_name = "app/other/applicant_home.html"
     cnt_last_vacancies = 3
     cnt_my_last_responses = 3
@@ -162,7 +111,7 @@ class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
         return context
 
 
-class VacanciesListView(ListView):
+class VacanciesListView(AlertMixin, ListView):
     model = Vacancy
     context_object_name = 'vacancies'
     template_name = 'app/vacancy/list.html'
@@ -334,10 +283,10 @@ def view_update_my_profile(request):
 
     if profile.is_applicant():
         applicant = Applicant.objects.get(profile=profile)
-        about_me_form = ApplicantForm(request.POST or None, instance=applicant)
+        about_me_form = ApplicantForm(request.POST or None, request.FILES or None, instance=applicant)
     else:
         employer = Employer.objects.get(profile=profile)
-        about_me_form = EmployerForm(request.POST or None, instance=employer)
+        about_me_form = EmployerForm(request.POST or None, request.FILES or None, instance=employer)
 
     if request.method == 'POST':
         valid = True

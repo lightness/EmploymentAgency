@@ -3,10 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from datetime import date
+from EmploymentAgency.settings import *
 
 
 def content_file_name(instance, filename):
-    return '/'.join(['content', instance.user.username, filename])
+    return '/'.join([MEDIA_ROOT, instance.profile.user.username, filename])
 
 
 CURRENCY = (
@@ -38,6 +39,7 @@ class Applicant(models.Model):
     profile = models.ForeignKey(Profile)
     full_name = models.CharField(max_length=100, verbose_name="Фамилия Имя Отчество")
     birth_date = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
+    photo = models.ImageField(upload_to=content_file_name, verbose_name="Фото")
 
     def age(self):
         if self.birth_date is None:
@@ -59,7 +61,7 @@ class Applicant(models.Model):
         text = hello
         if self.full_name:
             text += name
-        if self.birth_date:
+        if self.age() > 0:
             text += age
         text += response + contacts
         if self.profile.phone1:
@@ -172,7 +174,7 @@ class Application(models.Model):
     publish_date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        name = u"Меня зовут %s." % self.applicant.full_name
+        name = u"Меня зовут %s. " % self.applicant.full_name
         age = u"Мне %s лет. " % self.applicant.age()
         profession = u"Ищу работу по специальности: %s. " % self.profession
         experience = u"Имею опыт работы по специальности: %s лет. " % self.experience
@@ -182,7 +184,7 @@ class Application(models.Model):
         text = u""
         if self.applicant.full_name:
             text += name
-        if self.applicant.birth_date:
+        if self.applicant.age() > 0:
             text += age
         text += profession
         if self.experience:

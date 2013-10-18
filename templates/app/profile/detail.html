@@ -13,7 +13,13 @@
     </div>
 
     <div>
-        <dl class="dl-horizontal">
+        {% if employer %}
+            <img src="{{ employer.logo }}" class="pull-right" style="max-height: 300px"/>
+        {% elif applicant %}
+            <img src="{{ applicant.photo }}" class="pull-right" style="max-height: 300px"/>
+        {% endif %}
+
+        <dl class="dl-horizontal pull-left">
             {% if employer %}
                 <dt>Организация</dt>
                 <dd>{{ employer.title|default:"Не указано" }}</dd>
@@ -33,11 +39,15 @@
             <dd>{{ profile.skype|default:"Не указано" }}</dd>
             <dt>Контактный ICQ</dt>
             <dd>{{ profile.icq|default:"Не указано" }}</dd>
+
+            {% ifequal profile user.profile %}
+                <dd style="padding-top: 20px">
+                    <a class="btn btn-warning" href="{% url 'UpdateProfile' %}">Редактировать профиль</a>
+                </dd>
+            {% endifequal %}
         </dl>
     </div>
 
-    {% ifequal profile user.profile %}
-        <a class="btn btn-warning" href="{% url 'UpdateProfile' %}">Редактировать профиль</a>
-    {% endifequal %}
+
 
 {% endblock %}

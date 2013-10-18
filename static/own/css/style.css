@@ -19,6 +19,12 @@ table.td-to-top > tbody > tr > td{
     margin-bottom: 0 !important;
 }
 
+.my-alert {
+    display: inline-block;
+    min-width: 200px;
+    max-width: 400px;
+}
+
 /* -------------- login.html --------------- */
 #form-login {
     max-width: 330px;

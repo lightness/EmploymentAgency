@@ -11,7 +11,8 @@
         {% for a in last_applications %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowApplication' a.id %}">
-                    <img class="media-object" src="{{ STATIC_URL }}own/img/application.png" alt="...">
+                    {#                    <img class="media-object" src="{{ STATIC_URL }}own/img/application.png" alt="...">#}
+                    <img class="media-object" src="{{ a.applicant.photo }}" height="64" width="64" alt="...">
                 </a>
 
                 <div class="pull-right text-center">
@@ -28,7 +29,9 @@
                         <a href="{% url 'ShowApplication' a.id %}">
                             {{ a.profession }}
                         </a>
-                        <small>(стаж {{ a.experience }}лет)</small>
+                        {% if e.experience %}
+                            <small>(стаж {{ a.experience }}лет)</small>
+                        {% endif %}
                     </h4>
                     {{ a }}
                 </div>

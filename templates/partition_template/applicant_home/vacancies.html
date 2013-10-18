@@ -11,7 +11,7 @@
         {% for v in last_vacancies %}
             <div class="media">
                 <a class="pull-left" href="{% url 'ShowVacancy' v.id %}">
-                    <img class="media-object" src="{{ STATIC_URL }}own/img/vacancy.png" alt="...">
+                    <img class="media-object" src="{{ v.employer.logo }}" height="64" width="64" alt="...">
                 </a>
 
                 <div class="pull-right text-center">
