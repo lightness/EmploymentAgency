@@ -49,7 +49,7 @@
                             {%  endifequal %}
                         {% elif user.profile.is_applicant %}
                             {% if user.profile in vacancy.response_set.all|map:"applicant"|map:"profile" %}
-                                <a class="btn btn-xs btn-success" href="{% url 'ShowResponse' vacancy.id %}">Просмотр отклика</a>
+                                <a class="btn btn-xs btn-success" href="{% url 'GetMyResponseByVacancy' vacancy.id %}">Просмотр отклика</a>
                             {% else %}
                                 <a class="btn btn-xs btn-primary" href="{% url 'CreateResponse' vacancy.id %}">Откликнуться</a>
                             {% endif %}
