@@ -1,4 +1,5 @@
 {% extends 'layout/master.html' %}
+{% load tag_asterisk %}
 
 {% block content %}
 
@@ -23,7 +24,13 @@
             {% endif %}
 
             <form id="form-vacancy" action="." method="post">{% csrf_token %}
-                {{ form.as_p }}
+                {{ form.applicant }}
+                {{ form.vacancy }}
+
+                <div class="form-group">
+                    <label for="text">{{ form.text.label }}{% is_mandatory %}</label>
+                    {{ form.text }}
+                </div>
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Отправить работодателю</button>

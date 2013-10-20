@@ -11,7 +11,12 @@
     <p>{{ application }}</p>
 
     <div class="text-center">
-        <a class="btn btn-primary" href="{% url 'ShowProfile' application.applicant.id %}">Профиль пользователя</a>
+        {% ifequal user.profile application.applicant.profile %}
+            <a class="btn btn-warning" href="{% url 'UpdateApplication' application.id %}">Редактировать</a>
+            <a class="btn btn-danger" href="{% url 'DeleteApplication' application.id %}">Удалить</a>
+        {% else %}
+            <a class="btn btn-primary" href="{% url 'ShowProfile' application.applicant.id %}">Профиль пользователя</a>
+        {% endifequal %}
         <a class="btn btn-default" href="{% url 'Applications' %}">Все резюме</a>
         {% if user.profile.is_applicant %}
             <a class="btn btn-default" href="{% url 'MyApplications' %}">Мои резюме</a>

@@ -1,4 +1,5 @@
 {% extends 'layout/master.html' %}
+{% load tag_asterisk %}
 
 {% block content %}
 
@@ -31,7 +32,7 @@
             <form id="form-vacancy" action="." method="post">{% csrf_token %}
 
                 <div class="form-group">
-                    <label for="profession">Профессия</label>
+                    <label for="profession">{{ form.profession.label }}{% is_mandatory %}</label>
                     {{ form.profession }}
                 </div>
 

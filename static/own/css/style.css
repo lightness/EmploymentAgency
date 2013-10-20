@@ -2,7 +2,7 @@ textarea {
     resize: none;
 }
 
-#page-container{
+#page-container {
     padding-top: 60px;
 }
 
@@ -10,7 +10,7 @@ textarea {
     margin-top: 20px !important;
 }
 
-table.td-to-top > tbody > tr > td{
+table.td-to-top > tbody > tr > td {
     vertical-align: top;
     border: 20px solid white;
 }
@@ -23,6 +23,11 @@ table.td-to-top > tbody > tr > td{
     display: inline-block;
     min-width: 350px;
     max-width: 350px;
+}
+
+.mandatory-sign {
+    color: red;
+    margin-left: 5px;
 }
 
 /* -------------- login.html --------------- */

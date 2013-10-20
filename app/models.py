@@ -18,7 +18,7 @@ CURRENCY = (
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, verbose_name="Пользователь")
     phone1 = models.CharField(max_length=30, null=True, blank=True, verbose_name="Телефон №1")
     phone2 = models.CharField(max_length=30, null=True, blank=True, verbose_name="Телефон №2")
     email = models.EmailField(max_length=50, null=True, blank=True, verbose_name="Email")
@@ -91,16 +91,16 @@ class Employer(models.Model):
 
 
 class Vacancy(models.Model):
-    employer = models.ForeignKey(Employer)
-    profession = models.CharField(max_length=100)
-    position = models.CharField(max_length=100, blank=True, null=True)
-    salary_currency = models.CharField(max_length=10, choices=CURRENCY, blank=True, null=True)
-    salary_min = models.PositiveIntegerField(blank=True, null=True)
-    salary_max = models.PositiveIntegerField(blank=True, null=True)
-    age_min = models.PositiveSmallIntegerField(blank=True, null=True)
-    age_max = models.PositiveSmallIntegerField(blank=True, null=True)
-    details = models.TextField(blank=True, null=True)
-    publish_date = models.DateTimeField(auto_now=True)
+    employer = models.ForeignKey(Employer, verbose_name="Работодатель")
+    profession = models.CharField(max_length=100, verbose_name="Профессия")
+    position = models.CharField(max_length=100, blank=True, null=True, verbose_name="Должность")
+    salary_currency = models.CharField(max_length=10, choices=CURRENCY, blank=True, null=True, verbose_name="Ден. ед.")
+    salary_min = models.PositiveIntegerField(blank=True, null=True, verbose_name="Минимальная заработная плата")
+    salary_max = models.PositiveIntegerField(blank=True, null=True, verbose_name="Максимальная заработная плата")
+    age_min = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Минимальный возраст")
+    age_max = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Максимальный возраст")
+    details = models.TextField(blank=True, null=True, verbose_name="Дополнительная информация")
+    publish_date = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")
 
     def clean(self):
         if self.age_min and self.age_max:
@@ -152,10 +152,10 @@ class Vacancy(models.Model):
 
 
 class Response(models.Model):
-    applicant = models.ForeignKey(Applicant)
-    vacancy = models.ForeignKey(Vacancy)
+    applicant = models.ForeignKey(Applicant, verbose_name="Соискатель")
+    vacancy = models.ForeignKey(Vacancy, verbose_name="Вакансия")
     text = models.TextField(verbose_name='Текст отклика')
-    response_date = models.DateTimeField(auto_now=True)
+    response_date = models.DateTimeField(auto_now=True, verbose_name="Дата отклика")
 
     def __unicode__(self):
         return self.text
@@ -165,13 +165,13 @@ class Response(models.Model):
 
 
 class Application(models.Model):
-    applicant = models.ForeignKey(Applicant)
-    profession = models.CharField(max_length=100)
-    salary_min = models.PositiveIntegerField(blank=True, null=True)
-    salary_currency = models.CharField(max_length=10, choices=CURRENCY, blank=True, null=True)
-    experience = models.PositiveSmallIntegerField(blank=True, null=True)
-    details = models.TextField(blank=True, null=True)
-    publish_date = models.DateTimeField(auto_now=True)
+    applicant = models.ForeignKey(Applicant, verbose_name="Соискатель")
+    profession = models.CharField(max_length=100, verbose_name="Профессия")
+    salary_min = models.PositiveIntegerField(blank=True, null=True, verbose_name="Минимальная заработная плата")
+    salary_currency = models.CharField(max_length=10, choices=CURRENCY, blank=True, null=True, verbose_name="Ден. ед.")
+    experience = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Стаж работы")
+    details = models.TextField(blank=True, null=True, verbose_name="Дополнительная информация")
+    publish_date = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")
 
     def __unicode__(self):
         name = u"Меня зовут %s. " % self.applicant.full_name

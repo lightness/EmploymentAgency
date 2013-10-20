@@ -123,7 +123,7 @@ class VacanciesListView(AlertMixin, ListView):
         return context
 
 
-class VacancyCreateView(DenyIfNotEmployerMixin, CreateView):
+class VacancyCreateView(FormVacancyPageAlertMixin, DenyIfNotEmployerMixin, CreateView):
     model = Vacancy
     form_class = VacancyForm
     context_object_name = 'vacancy'
@@ -136,7 +136,7 @@ class VacancyCreateView(DenyIfNotEmployerMixin, CreateView):
         return new_kwargs
 
 
-class VacancyUpdateView(DenyIfEmployerNotOwnerMixin, UpdateView):
+class VacancyUpdateView(FormVacancyPageAlertMixin, DenyIfEmployerNotOwnerMixin, UpdateView):
     model = Vacancy
     form_class = VacancyForm
     context_object_name = 'vacancy'
@@ -312,7 +312,7 @@ def view_update_my_profile(request):
 
 # ##############################################
 
-class ApplicationCreateView(CreateApplicationPageAlertMixin, DenyIfNotApplicantMixin,CreateView):
+class ApplicationCreateView(FormApplicationPageAlertMixin, DenyIfNotApplicantMixin,CreateView):
     model = Application
     form_class = ApplicationForm
     context_object_name = 'application'
@@ -325,7 +325,7 @@ class ApplicationCreateView(CreateApplicationPageAlertMixin, DenyIfNotApplicantM
         return new_kwargs
 
 
-class ApplicationUpdateView(DenyIfApplicantNotOwnerMixin, UpdateView):
+class ApplicationUpdateView(FormApplicationPageAlertMixin, DenyIfApplicantNotOwnerMixin, UpdateView):
     model = Application
     form_class = ApplicationForm
     context_object_name = 'application'

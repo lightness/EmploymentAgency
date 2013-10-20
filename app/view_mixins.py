@@ -35,7 +35,7 @@ class ApplicantHomePageAlertMixin(AlertMixin):
         return alerts
 
 
-class CreateApplicationPageAlertMixin(AlertMixin):
+class FormApplicationPageAlertMixin(AlertMixin):
     def collect_alerts(self):
         alerts = ()
         alerts += self.append_if_need_fill_info()
@@ -68,12 +68,47 @@ class CreateApplicationPageAlertMixin(AlertMixin):
         profile = self.request.user.profile
         alerts = ()
         if not profile.phone1 and not profile.phone2 and not profile.email and not profile.icq and not profile.skype:
-            alert = Alert('Заполните контактную информацию. Иначе работодатели не смогут с вами связаться.',
+            alert = Alert('Заполните контактную информацию. Иначе с вами не смогут связаться.',
                           alert_class='alert-danger',button_text='Заполнить', button_class='btn-danger',
                           button_redirect_url='UpdateProfile')
             alerts += (alert,)
         return alerts
 
+
+class FormVacancyPageAlertMixin(AlertMixin):
+    def collect_alerts(self):
+        alerts = ()
+        alerts += self.append_if_need_fill_info()
+        alerts += self.append_if_need_fill_contact_info()
+        return alerts
+
+    def append_if_need_fill_info(self):
+        if not self.request.user.is_authenticated():
+            return ()
+        profile = self.request.user.profile
+        employer = Employer.objects.get(profile=profile)
+        alerts = ()
+        if not employer.title:
+            alert = Alert('Заполните, пожалуйста, название организации, которую Вы представляете.', alert_class='alert-danger',
+                          button_text='Заполнить', button_class='btn-danger', button_redirect_url='UpdateProfile')
+            alerts += (alert,)
+        if not employer.logo:
+            alert = Alert('Загрузите логотип Вашей организации!', alert_class='alert-warning',
+                          button_text='Загрузить', button_class='btn-warning', button_redirect_url='UpdateProfile')
+            alerts += (alert,)
+        return alerts
+
+    def append_if_need_fill_contact_info(self):
+        if not self.request.user.is_authenticated():
+            return ()
+        profile = self.request.user.profile
+        alerts = ()
+        if not profile.phone1 and not profile.phone2 and not profile.email and not profile.icq and not profile.skype:
+            alert = Alert('Заполните контактную информацию. Иначе с вами не смогут связаться.',
+                          alert_class='alert-danger',button_text='Заполнить', button_class='btn-danger',
+                          button_redirect_url='UpdateProfile')
+            alerts += (alert,)
+        return alerts
 
 
 class RedirectIfDenyMixin(object):

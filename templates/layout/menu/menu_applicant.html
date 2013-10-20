@@ -1,10 +1,10 @@
 <ul class="nav navbar-nav">
-    <li>
-        <a href="{% url 'ApplicantHome' %}">
-            <i class="glyphicon glyphicon-home"></i>
-            Домой
-        </a>
-    </li>
+{#    <li>#}
+{#        <a href="{% url 'ApplicantHome' %}">#}
+{#            <i class="glyphicon glyphicon-home"></i>#}
+{#            Домой#}
+{#        </a>#}
+{#    </li>#}
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="glyphicon glyphicon-tasks"></i>
@@ -60,6 +60,12 @@
 
 
 <ul class="nav navbar-nav navbar-right">
+    <li>
+        <div class="navbar-text">Добро пожаловать, <strong>{{ user.username }}</strong>.</div>
+    </li>
+    <li>
+        <a href="{% url 'Logout' %}">Выйти</a>
+    </li>
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             Помощь
@@ -75,12 +81,3 @@
         </ul>
     </li>
 </ul>
-
-<ul class="nav navbar-nav navbar-right">
-    <li>
-        <a href="{% url 'Logout' %}">Выйти</a>
-    </li>
-</ul>
-<div class="navbar-right">
-    <div class="navbar-text">Добро пожаловать, <strong>{{ user.username }}</strong>.</div>
-</div>

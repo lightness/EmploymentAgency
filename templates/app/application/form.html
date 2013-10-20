@@ -1,4 +1,5 @@
 {% extends 'layout/master.html' %}
+{% load tag_asterisk %}
 
 {% block content %}
 
@@ -32,7 +33,7 @@
                 {{ form.applicant }}
 
                 <div class="form-group">
-                    <label for="profession">Профессия</label>
+                    <label for="profession">{{ form.profession.label }}{% is_mandatory %}</label>
                     {{ form.profession }}
                 </div>
 
@@ -51,7 +52,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="experience">Стаж</label>
+                    <label for="experience">{{ form.experience.label }}</label>
 
                     <div class="row">
                         <div class="col-md-4">
@@ -64,7 +65,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="details">Дополнительная информация</label>
+                    <label for="details">{{ form.details.label }}</label>
                     {{ form.details }}
                 </div>
 

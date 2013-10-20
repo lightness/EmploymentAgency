@@ -1,7 +1,13 @@
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <div class="navbar-brand">ИС "Агентство занятости"</div>
+            {% if user.profile.is_applicant %}
+                <a class="navbar-brand" href="{% url 'ApplicantHome' %}">ИС "Агентство занятости"</a>
+            {% elif user.profile.is_employer %}
+                <a class="navbar-brand" href="{% url 'EmployerHome' %}">ИС "Агентство занятости"</a>
+            {% else %}
+                <a class="navbar-brand" href="{% url 'Home' %}">ИС "Агентство занятости"</a>
+            {% endif %}
         </div>
         <div class="navbar-collapse collapse">
             {% if user.profile.is_applicant %}
