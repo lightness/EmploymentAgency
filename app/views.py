@@ -18,6 +18,8 @@ RECORDS_PER_PAGE = 5
 def view_route_after_login(request):
     employers = Employer.objects.filter(profile__user__id=request.user.id)
     applicants = Applicant.objects.filter(profile__user__id=request.user.id)
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('admin:index'))
     if len(employers) == 1:
         return HttpResponseRedirect(reverse('EmployerHome'))
     elif len(applicants) == 1:
