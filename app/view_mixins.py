@@ -111,6 +111,49 @@ class FormVacancyPageAlertMixin(AlertMixin):
         return alerts
 
 
+########################################################################################################################
+
+
+class PageHeaderMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(PageHeaderMixin, self).get_context_data()
+        context['page_header'] = self.page_header
+        return context
+
+
+class TagSearchMixin(object):
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST or None)
+        tag = form.data['tag']
+        if tag:
+            url = reverse(self.my_name, kwargs={'tag': tag})
+        else:
+            url = reverse(self.my_name)
+        return HttpResponseRedirect(url)
+
+    def get_queryset(self):
+        queryset = super(TagSearchMixin, self).get_queryset()
+        tag = self.kwargs.get('tag')
+        if tag:
+            queryset = queryset.filter(profession__contains=tag)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(TagSearchMixin, self).get_context_data()
+        context['tag'] = self.kwargs.get('tag', '')
+        return context
+
+
+class SelfnamedMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(SelfnamedMixin, self).get_context_data()
+        context['this'] = self.my_name
+        return context
+
+
+########################################################################################################################
+
+
 class RedirectIfDenyMixin(object):
     def get(self, request, *args, **kwargs):
         redirect = self.redirect_if_denied()

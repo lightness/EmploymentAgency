@@ -122,67 +122,29 @@ class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
         return context
 
 
-class VacanciesListView(AlertMixin, ListView):
+class VacanciesListView(AlertMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Vacancy
-    form_class = TagForm
     context_object_name = 'vacancies'
     template_name = 'app/vacancy/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('Vacancies', kwargs={'tag': tag})
-        else:
-            url = reverse('Vacancies')
-        return HttpResponseRedirect(url)
-
-    def get_queryset(self):
-        queryset = super(VacanciesListView, self).get_queryset()
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(profession__contains=tag)
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(VacanciesListView, self).get_context_data()
-        context['page_header'] = 'Все вакансии'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'Vacancies'
-        return context
-
-
-class MyVacanciesListView(DenyIfNotEmployerMixin, ListView):
-    model = Vacancy
     form_class = TagForm
+    my_name = 'Vacancies'
+    page_header = 'Все вакансии'
+
+
+class MyVacanciesListView(DenyIfNotEmployerMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
+    model = Vacancy
     context_object_name = 'vacancies'
     template_name = 'app/vacancy/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('MyVacancies', kwargs={'tag': tag})
-        else:
-            url = reverse('MyVacancies')
-        return HttpResponseRedirect(url)
+    form_class = TagForm
+    my_name = 'MyVacancies'
+    page_header = 'Мои вакансии'
 
     def get_queryset(self):
         queryset = super(MyVacanciesListView, self).get_queryset()
         queryset = queryset.filter(employer__profile=self.request.user.profile)
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(profession__contains=tag)
         return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(MyVacanciesListView, self).get_context_data()
-        context['page_header'] = 'Мои вакансии'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'MyVacancies'
-        return context
 
 
 class VacancyCreateView(FormVacancyPageAlertMixin, DenyIfNotEmployerMixin, CreateView):
@@ -261,68 +223,34 @@ def view_route_to_my_response(request, **kwargs):
     return HttpResponseRedirect(reverse('ShowResponse', args=(my_response_id,)))
 
 
-class MyResponsesListView(DenyIfNotApplicantMixin, ListView):
+class MyResponsesListView(DenyIfNotApplicantMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Response
-    form_class = TagForm
     context_object_name = 'responses'
     template_name = 'app/response/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('MyResponses', kwargs={'tag': tag})
-        else:
-            url = reverse('MyResponses')
-        return HttpResponseRedirect(url)
+    form_class = TagForm
+    my_name = 'MyResponses'
+    page_header = 'Мои отклики'
 
     def get_queryset(self):
         queryset = super(MyResponsesListView, self).get_queryset()
         queryset = queryset.filter(applicant__profile=self.request.user.profile)
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(vacancy__profession__contains=tag)
         return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super(MyResponsesListView, self).get_context_data()
-        context['page_header'] = 'Мои отклики'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'MyResponses'
-        return context
 
-
-class ResponsesForMyVacanciesListView(DenyIfNotEmployerMixin, ListView):
+class ResponsesForMyVacanciesListView(DenyIfNotEmployerMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Response
     form_class = TagForm
     context_object_name = 'responses'
     template_name = 'app/response/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('ResponsesForMyVacancies', kwargs={'tag': tag})
-        else:
-            url = reverse('ResponsesForMyVacancies')
-        return HttpResponseRedirect(url)
+    my_name = 'ResponsesForMyVacancies'
+    page_header = 'Отклики на мои вакансии'
 
     def get_queryset(self):
         queryset = super(ResponsesForMyVacanciesListView, self).get_queryset()
         queryset = queryset.filter(vacancy__employer__profile=self.request.user.profile)
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(vacancy__profession__contains=tag)
         return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ResponsesForMyVacanciesListView, self).get_context_data()
-        context['page_header'] = 'Отклики на мои вакансии'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'ResponsesForMyVacancies'
-        return context
 
 
 class VacancyDetailView(DetailView):
@@ -414,67 +342,29 @@ class ApplicationUpdateView(FormApplicationPageAlertMixin, DenyIfApplicantNotOwn
     success_url = reverse_lazy('MyApplications')
 
 
-class ApplicationListView(ListView):
+class ApplicationListView(SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Application
     form_class = TagForm
     context_object_name = 'applications'
     template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('Applications', kwargs={'tag': tag})
-        else:
-            url = reverse('Applications')
-        return HttpResponseRedirect(url)
-
-    def get_queryset(self):
-        queryset = super(ApplicationListView, self).get_queryset()
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(profession__contains=tag)
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ApplicationListView, self).get_context_data()
-        context['page_header'] = 'Все заявления'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'Applications'
-        return context
+    my_name = 'Applications'
+    page_header = 'Все заявления'
 
 
-class MyApplicationListView(DenyIfNotApplicantMixin, ListView):
+class MyApplicationListView(DenyIfNotApplicantMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Application
     form_class = TagForm
     context_object_name = 'applications'
     template_name = 'app/application/list.html'
     paginate_by = RECORDS_PER_PAGE
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST or None)
-        tag = form.data['tag']
-        if tag:
-            url = reverse('MyApplications', kwargs={'tag': tag})
-        else:
-            url = reverse('MyApplications')
-        return HttpResponseRedirect(url)
+    my_name = 'MyApplications'
+    page_header = 'Мои заявления'
 
     def get_queryset(self):
         queryset = super(MyApplicationListView, self).get_queryset()
         queryset = queryset.filter(applicant__profile=self.request.user.profile)
-        tag = self.kwargs.get('tag')
-        if tag:
-            queryset = queryset.filter(profession__contains=tag)
         return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(MyApplicationListView, self).get_context_data()
-        context['page_header'] = 'Мои заявления'
-        context['tag'] = self.kwargs.get('tag', '')
-        context['this'] = 'MyApplications'
-        return context
 
 
 class ApplicationDeleteView(DenyIfApplicantNotOwnerMixin, DeleteView):
