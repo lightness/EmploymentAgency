@@ -37,7 +37,16 @@ urlpatterns = patterns('',
     # http://имя_сайта/app/vacancies/
     # http://имя_сайта/app/vacancies/pageN
     url(r"^vacancies/$", views.VacanciesListView.as_view(), name='Vacancies'),
+    url(r"^vacancies/tag/(?P<tag>\w+)/$", views.VacanciesListView.as_view(), name='Vacancies'),
     url(r"^vacancies/page(?P<page>\d+)/$", views.VacanciesListView.as_view(), name='Vacancies'),
+    url(r"^vacancies/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", views.VacanciesListView.as_view(), name='Vacancies'),
+
+    # http://имя_сайта/app/vacancies/my/
+    url(r"^vacancies/my/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
+    url(r"^vacancies/my/tag/(?P<tag>\w+)/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
+    url(r"^vacancies/my/page(?P<page>\d+)/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
+    url(r"^vacancies/my/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
+
 
     # http://имя_сайта/app/vacancy/create/
     url(r"^vacancy/create/$", login_required(views.VacancyCreateView.as_view()), name='CreateVacancy'),
@@ -61,18 +70,31 @@ urlpatterns = patterns('',
 
     # http://имя_сайта/app/vacancy/responses/my/
     url(r"^responses/my/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
+    url(r"^responses/my/page(?P<page>\d+)/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
+    url(r"^responses/my/tag/(?P<tag>\w+)/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
+    url(r"^responses/my/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", login_required(views.MyResponsesListView.as_view()), name='MyResponses'),
 
-    # http://имя_сайта/app/vacancies/my/
-    url(r"^vacancies/my/$", login_required(views.MyVacanciesListView.as_view()), name='MyVacancies'),
 
     # http://имя_сайта/app/vacancies/my/responses/
     url(r"^vacancies/my/responses/$", login_required(views.ResponsesForMyVacanciesListView.as_view()), name='ResponsesForMyVacancies'),
+    url(r"^vacancies/my/responses/page(?P<page>\d+)/$", login_required(views.ResponsesForMyVacanciesListView.as_view()), name='ResponsesForMyVacancies'),
+    url(r"^vacancies/my/responses/tag/(?P<tag>\w+)/$", login_required(views.ResponsesForMyVacanciesListView.as_view()), name='ResponsesForMyVacancies'),
+    url(r"^vacancies/my/responses/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", login_required(views.ResponsesForMyVacanciesListView.as_view()), name='ResponsesForMyVacancies'),
+
 
     # http://имя_сайта/app/applications/
     url(r"^applications/$", views.ApplicationListView.as_view(), name='Applications'),
+    url(r"^applications/page(?P<page>\d+)/$", views.ApplicationListView.as_view(), name='Applications'),
+    url(r"^applications/tag/(?P<tag>\w+)/$", views.ApplicationListView.as_view(), name='Applications'),
+    url(r"^applications/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", views.ApplicationListView.as_view(), name='Applications'),
+
 
     # http://имя_сайта/app/applications/my/
     url(r"^applications/my/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
+    url(r"^applications/my/page(?P<page>\d+)/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
+    url(r"^applications/my/tag/(?P<tag>\w+)/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
+    url(r"^applications/my/tag/(?P<tag>\w+)/page(?P<page>\d+)/$", login_required(views.MyApplicationListView.as_view()), name='MyApplications'),
+
 
     # http://имя_сайта/app/application/create/
     url(r"^application/create/$", login_required(views.ApplicationCreateView.as_view()), name='CreateApplication'),

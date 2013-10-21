@@ -3,12 +3,31 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>{{ page_header }}</h3>
-        {% if user.profile.is_applicant %}
-            <div>
-                <a class="btn btn-success" href="{% url 'CreateApplication' %}">Создать заявление</a>
-            </div>
-        {% endif %}
+        <div class="col-md-8">
+            <h3 style="margin-top: 0">
+                {{ page_header }}
+                {% if user.profile.is_applicant %}
+                    <a style="margin-left: 20px;" class="btn btn-success" href="{% url 'CreateApplication' %}">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        Создать заявление
+                    </a>
+                {% endif %}
+            </h3>
+        </div>
+        <div class="col-md-4">
+            <form action="." method="post">{% csrf_token %}
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Профессия:</span>
+                    <input type="text" name="tag" class="form-control" value="{{ tag }}">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
     </div>
 
     {% if applications %}
@@ -53,7 +72,11 @@
             <ul class="pagination pagination-sm">
                 {% if page_obj.has_previous %}
                     <li>
-                        <a href="{% url 'Vacancies' page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                        {% if tag %}
+                            <a href="{% url this tag=tag page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                        {% else %}
+                            <a href="{% url this page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                        {% endif %}
                     </li>
                 {% endif %}
                 <li class='active'>
@@ -61,7 +84,11 @@
                 </li>
                 {% if page_obj.has_next %}
                     <li>
-                        <a href="{% url 'Vacancies' page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                        {% if tag %}
+                            <a href="{% url this tag=tag page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                        {% else %}
+                            <a href="{% url this page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                        {% endif %}
                     </li>
                 {% endif %}
             </ul>

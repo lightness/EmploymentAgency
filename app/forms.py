@@ -4,6 +4,11 @@ from app.models import *
 from app.widgets import *
 
 
+
+class TagForm(forms.Form):
+    tag = forms.CharField(required=False)
+
+
 class UserWithEmailCreationForm(UserCreationForm):
     email = forms.EmailField(label="Email", max_length=254)
 

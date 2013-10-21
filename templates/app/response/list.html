@@ -3,7 +3,23 @@
 {% block content %}
 
     <div class="page-header">
-        <h3>{{ page_header }}</h3>
+        <div class="col-md-8">
+            <h3 style="margin-top: 0">{{ page_header }}</h3>
+        </div>
+        <div class="col-md-4">
+            <form action="." method="post">{% csrf_token %}
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Вакансия:</span>
+                    <input type="text" name="tag" class="form-control" value="{{ tag }}">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
     </div>
 
     {% if responses %}
@@ -13,7 +29,7 @@
                 <th>Соискатель</th>
                 <th>Вакансия</th>
                 <th>Организация</th>
-                <th>Дата создания вакансии</th>
+                <th>Всего откликов</th>
                 <th>Дата отклика</th>
                 <th>Действия</th>
             </tr>
@@ -28,7 +44,7 @@
                             {{ response.vacancy.employer.title }}
                         </a>
                     </td>
-                    <td>{{ response.vacancy.publish_date|date:"d.m.Y H:i:s" }}</td>
+                    <td>{{ response.vacancy.response_set.count }}</td>
                     <td>{{ response.response_date|date:"d.m.Y H:i:s" }}</td>
                     <td>
                         <a class="btn btn-primary btn-xs" href="{% url 'ShowResponse' response.id %}">Просмотр</a>
@@ -37,6 +53,31 @@
             {% endfor %}
             </tbody>
         </table>
+        {% if is_paginated %}
+            <ul class="pagination pagination-sm">
+                {% if page_obj.has_previous %}
+                    <li>
+                        {% if tag %}
+                            <a href="{% url this tag=tag page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                        {% else %}
+                            <a href="{% url this page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                <li class='active'>
+                    <span class="page-current">{{ page_obj.number }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li>
+                        {% if tag %}
+                            <a href="{% url this tag=tag page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                        {% else %}
+                            <a href="{% url this page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
     {% else %}
         <h5>Откликов нет</h5>
     {% endif %}
