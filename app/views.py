@@ -9,8 +9,11 @@ from app.models import *
 from app.forms import *
 from app.forms import UserWithEmailCreationForm
 from app.view_mixins import *
+from django.core import mail
+
 
 RECORDS_PER_PAGE = 5
+
 
 def view_route_after_login(request):
     employers = Employer.objects.filter(profile__user__id=request.user.id)
@@ -59,10 +62,14 @@ def view_choose_role(request):
 def view_register(request):
     template_name = "registration/register.html"
     form = UserWithEmailCreationForm(request.POST or None)
+    email_subject = 'Test message'
+    email_body = 'Hello world!'
+    email_from = 'registration@empagency.com'
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            mail.send_mail(email_subject, email_body, email_from, [form.cleaned_data["email"]])
             return HttpResponseRedirect(reverse('Registered'))
 
     context = {
