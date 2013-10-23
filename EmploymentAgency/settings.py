@@ -90,6 +90,13 @@ MEDIA_URL = '/media/'
 
 ##################  EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'tut.by'
+EMAIL_HOST_PASSWORD = '1429100'
+EMAIL_HOST_USER = 'ylad'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'ylad@tut.by'
+SERVER_EMAIL = 'ylad@tut.by'
 
 
 
