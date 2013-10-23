@@ -80,7 +80,7 @@ def view_register(request):
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 
-class ApplicantHomeView(ApplicantHomePageAlertMixin, DenyIfNotApplicantMixin, TemplateView):
+class ApplicantHomeView(HomePageAlertMixin, DenyIfNotApplicantMixin, TemplateView):
     template_name = "app/other/applicant_home.html"
     cnt_last_vacancies = 3
     cnt_my_last_responses = 3
@@ -102,7 +102,7 @@ class ApplicantHomeView(ApplicantHomePageAlertMixin, DenyIfNotApplicantMixin, Te
         return context
 
 
-class EmployerHomeView(DenyIfNotEmployerMixin, TemplateView):
+class EmployerHomeView(HomePageAlertMixin, DenyIfNotEmployerMixin, TemplateView):
     template_name = "app/other/employer_home.html"
     cnt_last_applications = 3
     cnt_last_responses_for_my_vacancies = 3
