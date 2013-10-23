@@ -42,6 +42,7 @@
             {% ifequal profile user.profile %}
                 <dd style="padding-top: 20px">
                     <a class="btn btn-warning" href="{% url 'UpdateProfile' %}">Редактировать профиль</a>
+                    <a class="btn btn-default" href="{% url 'password_change' %}">Сменить пароль</a>
                 </dd>
             {% endifequal %}
         </dl>

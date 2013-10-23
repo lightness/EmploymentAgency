@@ -24,6 +24,9 @@ urlpatterns = patterns('',
     url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, name='password_reset_confirm'),
     url(r'^accounts/password/done/$', password_reset_complete, name='password_reset_complete'),
 
+    url(r'^accounts/password/change/$', password_change, name='password_change'),
+    url(r'^accounts/password/change/done/$', password_change_done, name='password_change_done'),
+
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

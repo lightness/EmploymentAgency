@@ -1,7 +1,9 @@
 #coding: utf-8
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import RedirectView
 from app import views
+from django.core.urlresolvers import reverse, reverse_lazy
 
 
 urlpatterns = patterns('',

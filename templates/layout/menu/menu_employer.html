@@ -1,10 +1,4 @@
 <ul class="nav navbar-nav">
-{#    <li>#}
-{#        <a href="{% url 'EmployerHome' %}">#}
-{#            <i class="glyphicon glyphicon-home"></i>#}
-{#            Домой#}
-{#        </a>#}
-{#    </li>#}
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="glyphicon glyphicon-tasks"></i>
@@ -52,11 +46,39 @@
 
 
 <ul class="nav navbar-nav navbar-right">
-    <li>
-        <div class="navbar-text">Добро пожаловать, <strong>{{ user.username }}</strong>.</div>
-    </li>
-    <li>
-        <a href="{% url 'Logout' %}">Выйти</a>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Добро пожаловать, <strong>{{ user.username }}</strong>.
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="dropdown-header">Профиль</li>
+            <li>
+                <a href="{% url 'ShowProfile' user.profile.id %}">
+                    <i class="glyphicon glyphicon-user"></i>
+                    Смотреть
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'UpdateProfile' %}">
+                    <i class="glyphicon glyphicon-cog"></i>
+                    Редактировать
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'password_change' %}">
+                    <i class="glyphicon glyphicon-wrench"></i>
+                    Сменить пароль
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="{% url 'Logout' %}">
+                    <i class="glyphicon glyphicon-leaf"></i>
+                    Выход
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
