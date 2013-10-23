@@ -1,48 +1,23 @@
 {% extends 'layout/master.html' %}
 
+{% block pagetitle %}
+    <h3>Мой профиль</h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header text-center">
-        <h3>Мой профиль</h3>
-    </div>
-
     <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="row">
             <div class="col-md-6">
                 <h4 class="text-center">Контактная информация</h4>
 
-                {% if profile.errors %}
-                    <div class="alert alert-danger">
-                        <b>Исправьте следующие ошибки:</b>
-                        {{ profile.non_field_errors }}
-                        <ul>
-                            {% for field in profile %}
-                                {% for error in field.errors %}
-                                    <li><b>{{ field.label }}</b> - {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+                {% include 'layout/form_errors.html' with form=profile %}
 
                 {{ profile.as_p }}
             </div>
             <div class="col-md-6">
                 <h4 class="text-center">О себе</h4>
 
-                {% if about_me.errors %}
-                    <div class="alert alert-danger">
-                        <b>Исправьте следующие ошибки:</b>
-                        {{ about_me.non_field_errors }}
-                        <ul>
-                            {% for field in about_me %}
-                                {% for error in field.errors %}
-                                    <li><b>{{ field.label }}</b> - {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+                {% include 'layout/form_errors.html' with form=about_me %}
 
                 {{ about_me.profile }}
                 {% if user.profile.is_applicant %}

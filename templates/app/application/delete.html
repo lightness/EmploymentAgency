@@ -1,15 +1,13 @@
 {% extends 'layout/master.html' %}
 
+{% block pagetitle %}
+    <h3>Удаление заявления</h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header">
-        <h3>Удаление заявления</h3>
-    </div>
-
     <h4>Вы действительно хотите удалить заявление о поиске работы по професии <b>{{ application.profession }}</b>?</h4>
     <form action="" method="post">{% csrf_token %}
         <button class="btn btn-danger">Да</button>
         <a href="{% url 'MyApplications' %}" class="btn btn-default">Нет</a>
     </form>
-
 {% endblock %}

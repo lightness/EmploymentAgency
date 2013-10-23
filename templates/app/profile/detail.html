@@ -1,17 +1,16 @@
 {% extends 'layout/master.html' %}
 
+{% block pagetitle %}
+    <h3>
+        {% if employer %}
+            Профиль работодателя: {{ employer.title|default:employer }}
+        {% elif applicant %}
+            Профиль соискателя: {{ applicant.full_name|default:applicant }}
+        {% endif %}
+    </h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header">
-        <h3>
-            {% if employer %}
-                Профиль работодателя: {{ employer.title|default:employer }}
-            {% elif applicant %}
-                Профиль соискателя: {{ applicant.full_name|default:applicant }}
-            {% endif %}
-        </h3>
-    </div>
-
     <div>
         {% if employer %}
             <img src="{{ employer.logo }}" class="pull-right" style="max-height: 300px"/>

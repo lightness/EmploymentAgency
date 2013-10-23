@@ -1,34 +1,27 @@
 {% extends 'layout/master.html' %}
 
+{% block pagetitle %}
+    <h3>Вход в систему</h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header text-center">
-        <h3>Вход в систему</h3>
-    </div>
-
     <form id="form-login" action='.' method='post'>{% csrf_token %}
-
         <div class="form-group">
             <!-- Username -->
             <label for="username">Имя пользователя</label>
             <input type="text" id="username" name="username" class="form-control">
         </div>
-
         <div class="form-group">
             <!-- Password-->
             <label for="password">Пароль</label>
+            <a class="pull-right" href="{% url 'password_reset' %}">Забыли пароль?</a>
             <input type="password" id="password" name="password" class="form-control">
         </div>
-
-        {% if form.errors %}
-            <div class="alert alert-danger">Сожалеем, вы неправильно ввели логин или пароль</div>
-        {% endif %}
-
+        {% include 'layout/form_errors.html' with form=form %}
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Войти</button>
             <a class="btn btn-default" href="{% url 'Register' %}">Зарегистрироваться</a>
         </div>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
-
 {% endblock %}

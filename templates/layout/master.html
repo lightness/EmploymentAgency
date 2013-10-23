@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <title>ИС "Агентство занятости"</title>
+    <title>{% block title %}ИС "Агентство занятости"{% endblock %}</title>
     <link href="{{ STATIC_URL }}own/css/style.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}plugins/bootstrap-3.0.0/css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}plugins/bootstrap-3.0.0/css/bootstrap-theme.css" rel="stylesheet">
@@ -44,6 +44,11 @@
 {% include 'layout/menu/menu.html' %}
 <div id="page-container">
     <div class="container">
+        {% block pagetitle_container %}
+            <div class="page-header">
+                {% block pagetitle %}{% endblock %}
+            </div>
+        {% endblock %}
         {% block content %}Empty page{% endblock %}
     </div>
 </div>

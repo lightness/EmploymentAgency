@@ -1,33 +1,20 @@
 {% extends 'layout/master.html' %}
 {% load tag_asterisk %}
 
+{% block pagetitle %}
+    <h3>
+        {% if form.instance.pk %}
+            Редактрирование заявление "{{ form.instance.profession }}"
+        {% else %}
+            Создание заявление
+        {% endif %}
+    </h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header text-center">
-        <h3>
-            {% if form.instance.pk %}
-                Редактрирование заявление "{{ form.instance.profession }}"
-            {% else %}
-                Создание заявление
-            {% endif %}
-        </h3>
-    </div>
-
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    <b>Исправьте следующие ошибки:</b>
-                    {{ form.non_field_errors }}
-                    <ul>
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <li><b>{{ field.label }}</b> - {{ error }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
+            {% include 'layout/form_errors.html' with form=form %}
 
             <form action="." method="post">{% csrf_token %}
                 {{ form.applicant }}

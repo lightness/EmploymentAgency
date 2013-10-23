@@ -1,7 +1,8 @@
 {% extends 'layout/master.html' %}
 
-{% block content %}
+{% block pagetitle_container %}{% endblock %}
 
+{% block content %}
     <table class="td-to-top">
         <tr class="row">
             <td class="col-md-6 alert">{% include 'partition_template/applicant_home/vacancies.html' %}</td>
@@ -12,5 +13,4 @@
             <td class="col-md-6 alert">{% include 'partition_template/applicant_home/my_responses.html' %}</td>
         </tr>
     </table>
-
 {% endblock %}

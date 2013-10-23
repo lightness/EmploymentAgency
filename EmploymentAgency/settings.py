@@ -1,5 +1,4 @@
 import os
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 AUTH_PROFILE_MODULE = 'app.Profile'
@@ -41,7 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -89,14 +88,14 @@ MEDIA_ROOT = '/media'
 MEDIA_URL = '/media/'
 
 ##################  EMAIL
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'tut.by'
-EMAIL_HOST_PASSWORD = '1429100'
-EMAIL_HOST_USER = 'ylad'
-EMAIL_PORT = 25
-EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'ylad@tut.by'
-SERVER_EMAIL = 'ylad@tut.by'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if DEBUG:
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    DEFAULT_FROM_EMAIL = 'testing@example.com'
 
 
 

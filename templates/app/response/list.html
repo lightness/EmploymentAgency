@@ -1,27 +1,26 @@
 {% extends 'layout/master.html' %}
 
-{% block content %}
-
-    <div class="page-header">
-        <div class="col-md-8">
-            <h3 style="margin-top: 0">{{ page_header }}</h3>
-        </div>
-        <div class="col-md-4">
-            <form action="." method="post">{% csrf_token %}
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">Вакансия:</span>
-                    <input type="text" name="tag" class="form-control" value="{{ tag }}">
+{% block pagetitle %}
+    <div class="col-md-8">
+        <h3 style="margin-top: 0">{{ page_header }}</h3>
+    </div>
+    <div class="col-md-4">
+        <form action="." method="post">{% csrf_token %}
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">Вакансия:</span>
+                <input type="text" name="tag" class="form-control" value="{{ tag }}">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                     </span>
-                </div>
-            </form>
-        </div>
-        <div class="clearfix"></div>
+            </div>
+        </form>
     </div>
+    <div class="clearfix"></div>
+{% endblock %}
 
+{% block content %}
     {% if responses %}
         <table class="table table-bordered table-stripped">
             <thead>

@@ -3,19 +3,7 @@
 {% block content %}
     <form class="form form-horizontal" action='' method="POST" id="form-register">{% csrf_token %}
         <h2 class="text-center">Регистрация</h2>
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <b>Исправьте следующие ошибки:</b>
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li><b>{{ field.label }}</b> - {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+        {% include 'layout/form_errors.html' with form=form %}
 
         <div class="form-group">
             <!-- Username -->

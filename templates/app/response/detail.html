@@ -1,11 +1,10 @@
 {% extends 'layout/master.html' %}
 
+{% block pagetitle %}
+    <h3>Отклик на вакансию {{ response.vacancy.employer.title }} "{{ response.vacancy.profession }}"</h3>
+{% endblock %}
+
 {% block content %}
-
-    <div class="page-header">
-        <h3>Отклик на вакансию {{ response.vacancy.employer.title }} "{{ response.vacancy.profession }}"</h3>
-    </div>
-
     <div>
         <p>{{ response.text }}</p>
     </div>
@@ -20,5 +19,4 @@
             <a class="btn btn-default" href="{% url 'ResponsesForMyVacancies' %}">Отклики на мои вакансии</a>
         {% endif %}
     </div>
-
 {% endblock %}
