@@ -1,6 +1,8 @@
 #coding: utf-8
+import django
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView
 from django.views.generic.list import ListView
+from django.views.generic.edit import BaseFormView, FormView, ProcessFormView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -10,6 +12,7 @@ from app.forms import *
 from app.forms import UserWithEmailCreationForm
 from app.view_mixins import *
 from django.core import mail
+from django.contrib import auth
 
 
 RECORDS_PER_PAGE = 5
@@ -25,6 +28,12 @@ def view_route_after_login(request):
     elif len(applicants) == 1:
         return HttpResponseRedirect(reverse('ApplicantHome'))
     return HttpResponseRedirect(reverse('ChooseRole'))
+
+
+def view_route_to_my_response(request, **kwargs):
+    vacancy_id = kwargs['pk']
+    my_response_id = Response.objects.get(vacancy__id=vacancy_id, applicant__profile=request.user.profile).id
+    return HttpResponseRedirect(reverse('ShowResponse', args=(my_response_id,)))
 
 
 class AboutView(AlertMixin, TemplateView):
@@ -43,41 +52,37 @@ class HomeView(TemplateView):
     template_name = "app/other/home.html"
 
 
-def view_choose_role(request):
+class ChooseRoleView(FormView):
     template_name = "app/other/choose_role.html"
+    form_class = ChooseRoleForm
+    employer_success_url = reverse_lazy('EmployerHome')
+    applicant_success_url = reverse_lazy('ApplicantHome')
+    default_success_url = reverse_lazy('About')
 
-    if request.method == "POST":
+    def post(self, request, *args, **kwargs):
         role = request.POST["role"]
         profile = Profile.objects.create(user=request.user)
         if role == "EMP":
             Employer.objects.create(profile=profile)
-            return HttpResponseRedirect(reverse('EmployerHome'))
+            return HttpResponseRedirect(self.employer_success_url)
         elif role == "APP":
             Applicant.objects.create(profile=profile)
-            return HttpResponseRedirect(reverse('ApplicantHome'))
-        return HttpResponseRedirect(reverse('About'))
-
-    context = {}
-    return render_to_response(template_name, context, context_instance=RequestContext(request))
+            return HttpResponseRedirect(self.applicant_success_url)
+        return HttpResponseRedirect(self.default_success_url)
 
 
-def view_register(request):
+class UserCreateView(CreateView):
+    model = auth.get_user_model()
+    form_class = UserWithEmailCreationForm
     template_name = "registration/register.html"
-    form = UserWithEmailCreationForm(request.POST or None)
+    success_url = reverse_lazy('Registered')
     email_subject = 'Test message'
     email_body = 'Hello world!'
     email_from = 'registration@empagency.com'
 
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            mail.send_mail(email_subject, email_body, email_from, [form.cleaned_data["email"]])
-            return HttpResponseRedirect(reverse('Registered'))
-
-    context = {
-        'form': form
-    }
-    return render_to_response(template_name, context, context_instance=RequestContext(request))
+    def form_valid(self, form):
+        mail.send_mail(self.email_subject, self.email_body, self.email_from, [form.cleaned_data["email"]])
+        return super(UserCreateView, self).form_valid(form)
 
 
 class ApplicantHomeView(HomePageAlertMixin, DenyIfNotApplicantMixin, TemplateView):
@@ -219,12 +224,6 @@ class ResponseDetailView(RedirectIfDenyMixin, DetailView):
                 return HttpResponseRedirect(reverse('AccessDenied'))
 
 
-def view_route_to_my_response(request, **kwargs):
-    vacancy_id = kwargs['pk']
-    my_response_id = Response.objects.get(vacancy__id=vacancy_id, applicant__profile=request.user.profile).id
-    return HttpResponseRedirect(reverse('ShowResponse', args=(my_response_id,)))
-
-
 class MyResponsesListView(DenyIfNotApplicantMixin, SelfnamedMixin, TagSearchMixin, PageHeaderMixin, ListView):
     model = Response
     context_object_name = 'responses'
@@ -286,21 +285,34 @@ class ProfileDetailView(DetailView):
         return context
 
 
-def view_update_my_profile(request):
+class ProfileUpdateView(ProcessFormView):
     template_name = 'app/profile/form.html'
 
-    profile = request.user.profile
-    profile_form = ProfileForm(request.POST or None, instance=profile)
+    def get_profile_form(self):
+        profile = self.request.user.profile
+        return ProfileForm(self.request.POST or None, instance=profile)
 
-    if profile.is_applicant():
-        applicant = Applicant.objects.get(profile=profile)
-        about_me_form = ApplicantForm(request.POST or None, request.FILES or None, instance=applicant)
-    else:
-        employer = Employer.objects.get(profile=profile)
-        about_me_form = EmployerForm(request.POST or None, request.FILES or None, instance=employer)
+    def get_about_me_form(self):
+        profile = self.request.user.profile
+        if profile.is_applicant():
+            applicant = Applicant.objects.get(profile=profile)
+            about_me_form = ApplicantForm(self.request.POST or None, self.request.FILES or None, instance=applicant)
+        else:
+            employer = Employer.objects.get(profile=profile)
+            about_me_form = EmployerForm(self.request.POST or None, self.request.FILES or None, instance=employer)
+        return about_me_form
 
-    if request.method == 'POST':
+    def get_data_context(self):
+        context = {
+            'profile': self.get_profile_form(),
+            'about_me': self.get_about_me_form()
+        }
+        return context
+
+    def get_form_valid(self):
         valid = True
+        profile_form = self.get_profile_form()
+        about_me_form = self.get_about_me_form()
 
         if profile_form.is_valid():
             profile_form.save()
@@ -312,14 +324,54 @@ def view_update_my_profile(request):
         else:
             valid = False
 
-        if valid:
-            return HttpResponseRedirect(reverse('ShowProfile', args=(profile.id,)))
+        return valid
 
-    context = {
-        'profile': profile_form,
-        'about_me': about_me_form
-    }
-    return render_to_response(template_name, context, context_instance=RequestContext(request))
+    def get(self, request, *args, **kwargs):
+        self.request = request
+        context = self.get_data_context()
+        return render_to_response(self.template_name, context, context_instance=RequestContext(request))
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        if self.get_form_valid():
+            return HttpResponseRedirect(reverse('ShowProfile', args=(request.user.profile.id,)))
+        context = self.get_data_context()
+        return render_to_response(self.template_name, context, context_instance=RequestContext(request))
+
+#def view_update_my_profile(request):
+#    template_name = 'app/profile/form.html'
+#
+#    profile = request.user.profile
+#    profile_form = ProfileForm(request.POST or None, instance=profile)
+#
+#    if profile.is_applicant():
+#        applicant = Applicant.objects.get(profile=profile)
+#        about_me_form = ApplicantForm(request.POST or None, request.FILES or None, instance=applicant)
+#    else:
+#        employer = Employer.objects.get(profile=profile)
+#        about_me_form = EmployerForm(request.POST or None, request.FILES or None, instance=employer)
+#
+#    if request.method == 'POST':
+#        valid = True
+#
+#        if profile_form.is_valid():
+#            profile_form.save()
+#        else:
+#            valid = False
+#
+#        if about_me_form.is_valid():
+#            about_me_form.save()
+#        else:
+#            valid = False
+#
+#        if valid:
+#            return HttpResponseRedirect(reverse('ShowProfile', args=(profile.id,)))
+#
+#    context = {
+#        'profile': profile_form,
+#        'about_me': about_me_form
+#    }
+#    return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 # ##############################################
 

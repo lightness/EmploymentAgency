@@ -15,7 +15,8 @@ urlpatterns = patterns('',
 
     url(r'^accounts/profile/$', views.view_route_after_login, name='RouteAfterLogin'),
     url(r"^accounts/register/success/$", views.RegisterSuccessView.as_view(), name='Registered'),
-    url(r'^accounts/register/$', views.view_register, name='Register'),
+    #url(r'^accounts/register/$', views.view_register, name='Register'),
+    url(r'^accounts/register/$', views.UserCreateView.as_view(), name='Register'),
     url(r'^accounts/login/$',  login, name='Login'),
     url(r'^accounts/logout/$', logout_then_login, name='Logout'),
 

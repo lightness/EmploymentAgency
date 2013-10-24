@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r"^access/denied/$", views.AccessDeniedView.as_view(), name='AccessDenied'),
 
     # http://имя_сайта/app/role/choose/
-    url(r"^role/choose/$", login_required(views.view_choose_role), name='ChooseRole'),
+    url(r"^role/choose/$", login_required(views.ChooseRoleView.as_view()), name='ChooseRole'),
 
     # http://имя_сайта/app/home
     url(r"^home/$", views.HomeView.as_view(), name='Home'),

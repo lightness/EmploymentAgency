@@ -4,6 +4,9 @@ from app.models import *
 from app.widgets import *
 
 
+class ChooseRoleForm(forms.Form):
+    role = forms.CharField()
+
 
 class TagForm(forms.Form):
     tag = forms.CharField(required=False)
