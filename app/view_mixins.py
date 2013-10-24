@@ -15,7 +15,7 @@ class AlertMixin(object):
         pass
 
 
-class ApplicantHomePageAlertMixin(AlertMixin):
+class HomePageAlertMixin(AlertMixin):
     def collect_alerts(self):
         alerts = ()
         alerts += self.append_if_need_fill_phones()
@@ -27,11 +27,10 @@ class ApplicantHomePageAlertMixin(AlertMixin):
             return ()
         profile = self.request.user.profile
         alerts = ()
-        if profile.is_applicant():
-            if not profile.phone1 and not profile.phone2:
-                alert = Alert('Заполните, пожалуйста, контактный телефон.', alert_class='alert-warning',
-                              button_text='Заполнить', button_class='btn-warning', button_redirect_url='UpdateProfile')
-                alerts += (alert,)
+        if not profile.phone1 and not profile.phone2:
+            alert = Alert('Заполните, пожалуйста, контактный телефон.', alert_class='alert-warning',
+                          button_text='Заполнить', button_class='btn-warning', button_redirect_url='UpdateProfile')
+            alerts += (alert,)
         return alerts
 
 
@@ -69,7 +68,7 @@ class FormApplicationPageAlertMixin(AlertMixin):
         alerts = ()
         if not profile.phone1 and not profile.phone2 and not profile.email and not profile.icq and not profile.skype:
             alert = Alert('Заполните контактную информацию. Иначе с вами не смогут связаться.',
-                          alert_class='alert-danger',button_text='Заполнить', button_class='btn-danger',
+                          alert_class='alert-danger', button_text='Заполнить', button_class='btn-danger',
                           button_redirect_url='UpdateProfile')
             alerts += (alert,)
         return alerts
@@ -89,7 +88,8 @@ class FormVacancyPageAlertMixin(AlertMixin):
         employer = Employer.objects.get(profile=profile)
         alerts = ()
         if not employer.title:
-            alert = Alert('Заполните, пожалуйста, название организации, которую Вы представляете.', alert_class='alert-danger',
+            alert = Alert('Заполните, пожалуйста, название организации, которую Вы представляете.',
+                          alert_class='alert-danger',
                           button_text='Заполнить', button_class='btn-danger', button_redirect_url='UpdateProfile')
             alerts += (alert,)
         if not employer.logo:
@@ -105,7 +105,7 @@ class FormVacancyPageAlertMixin(AlertMixin):
         alerts = ()
         if not profile.phone1 and not profile.phone2 and not profile.email and not profile.icq and not profile.skype:
             alert = Alert('Заполните контактную информацию. Иначе с вами не смогут связаться.',
-                          alert_class='alert-danger',button_text='Заполнить', button_class='btn-danger',
+                          alert_class='alert-danger', button_text='Заполнить', button_class='btn-danger',
                           button_redirect_url='UpdateProfile')
             alerts += (alert,)
         return alerts
