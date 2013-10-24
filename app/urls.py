@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r"^home/$", views.HomeView.as_view(), name='Home'),
 
     # http://имя_сайта/app/profile/my/update/
-    url(r"^profile/my/update/$", login_required(views.view_update_my_profile), name='UpdateProfile'),
+    url(r"^profile/my/update/$", login_required(views.ProfileUpdateView.as_view()), name='UpdateProfile'),
 
     # http://имя_сайта/app/profile/id/
     url(r"^profile/(?P<pk>\d+)/$", login_required(views.ProfileDetailView.as_view()), name='ShowProfile'),
@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     url(r"^home/employer/$", login_required(views.EmployerHomeView.as_view()), name='EmployerHome'),
 
     # http://имя_сайта/app/vacancy/id/response/my/
-    url(r"^vacancy/(?P<pk>\d+)/response/my/$", login_required(views.view_route_to_my_response), name='GetMyResponseByVacancy'),
+    url(r"^vacancy/(?P<pk>\d+)/response/my/$", login_required(views.ToMyResponseRedirectView.as_view()), name='GetMyResponseByVacancy'),
 
     ####################################################################################################################
 
