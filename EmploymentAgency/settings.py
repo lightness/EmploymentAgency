@@ -87,6 +87,9 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = '/media'
 MEDIA_URL = '/media/'
 
+IMAGE_CONTENT_TYPES = ['image']
+MAX_UPLOAD_SIZE = 5242880 #5MB
+
 ##################  EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 if DEBUG:

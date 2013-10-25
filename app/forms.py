@@ -1,8 +1,10 @@
+#coding: utf-8
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from app.models import *
 from app.widgets import *
-
+from django.template.defaultfilters import filesizeformat
+from app.form_mixins import *
 
 class ChooseRoleForm(forms.Form):
     role = forms.CharField()
@@ -65,18 +67,27 @@ class ProfileForm(forms.ModelForm):
         }
 
 
-class ApplicantForm(forms.ModelForm):
+class ApplicantForm(ImageFormMixin, forms.ModelForm):
+
+    def clean_photo(self):
+        return self.clean_image('photo')
+
     class Meta:
         model = Applicant
         exclude = ()
         widgets = {
             'profile': forms.HiddenInput(),
             'full_name': BootstrapTextInput(),
-            'birth_date': BootstrapDateInput()
+            'birth_date': BootstrapDateInput(),
+            'photo': forms.ClearableFileInput()
         }
 
 
-class EmployerForm(forms.ModelForm):
+class EmployerForm(ImageFormMixin, forms.ModelForm):
+
+    def clean_logo(self):
+        return self.clean_image('logo')
+
     class Meta:
         model = Employer
         exclude = ()

@@ -84,7 +84,7 @@ class Applicant(models.Model):
 class Employer(models.Model):
     profile = models.ForeignKey(Profile)
     title = models.CharField(max_length=100, verbose_name="Наименование организации")
-    logo = models.ImageField(upload_to=content_file_name, verbose_name="Лого")
+    logo = models.ImageField(null=True, blank=True, upload_to=content_file_name, verbose_name="Лого")
 
     def __unicode__(self):
         return self.profile.user.username
